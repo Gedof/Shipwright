@@ -9957,7 +9957,7 @@ void func_808473D4(GlobalContext* globalCtx, Player* this) {
                     !(this->stateFlagsMask & PLAYER_STATE_MASK_SINKING) &&
                     CHECK_BTN_ALL(sControlInput->cur.button, BTN_R)) {
                     doAction = DO_ACTION_DOWN;
-                } else if (Player_MaskZoraSink(this) && sp1C &&
+                } else if (Player_MaskZoraSink(this) && !sp1C &&
                     (this->stateFlagsMask & PLAYER_STATE_MASK_SINKING) &&
                     CHECK_BTN_ALL(sControlInput->cur.button, BTN_R)) {
                     doAction = DO_ACTION_RETURN;
