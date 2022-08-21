@@ -936,13 +936,16 @@ void func_80083108(GlobalContext* globalCtx) {
             }
         } else if (msgCtx->msgMode == MSGMODE_NONE) {
             if ((func_8008F2F8(globalCtx) >= 2) && (func_8008F2F8(globalCtx) < 5)) {
-                if (gSaveContext.buttonStatus[0] != BTN_DISABLED) {
-                    sp28 = 1;
+
+                if (!Player_MaskZoraWaterSword(player)) {
+                    if (gSaveContext.buttonStatus[0] != BTN_DISABLED) {
+                        sp28 = 1;
+                    }
+
+                    gSaveContext.buttonStatus[0] = BTN_DISABLED;
                 }
 
-                gSaveContext.buttonStatus[0] = BTN_DISABLED;
-
-                for (i = 1; i < ARRAY_COUNT(gSaveContext.equips.buttonItems); i++) {
+                for (i = Player_MaskZoraWaterSword(player) ? 0 : 1; i < ARRAY_COUNT(gSaveContext.equips.buttonItems); i++) {
                     if ((gSaveContext.equips.buttonItems[i] >= ITEM_SHIELD_DEKU) &&
                         (gSaveContext.equips.buttonItems[i] <= ITEM_BOOTS_HOVER)) {
                         // Equipment on c-buttons is always enabled
@@ -962,6 +965,11 @@ void func_80083108(GlobalContext* globalCtx) {
 
                         if (Player_MaskZoraWaterBoom(player)) {
                             underwaterItems |= gSaveContext.equips.buttonItems[i] == ITEM_BOOMERANG;
+                        }
+
+                        if (Player_MaskZoraWaterSword(player)) {
+                            underwaterItems |= gSaveContext.equips.buttonItems[i] >= ITEM_SWORD_KOKIRI &&
+                                               gSaveContext.equips.buttonItems[i] <= ITEM_SWORD_BGS;
                         }
 
                         if (underwaterItems) {
@@ -988,7 +996,7 @@ void func_80083108(GlobalContext* globalCtx) {
                         } else {
                             if (gSaveContext.buttonStatus[BUTTON_STATUS_INDEX(i)] == BTN_ENABLED) {
                                 sp28 = 1;
-                        }
+                            }
 
                             gSaveContext.buttonStatus[BUTTON_STATUS_INDEX(i)] = BTN_DISABLED;
                         }

@@ -2858,6 +2858,10 @@ void func_80835F44(GlobalContext* globalCtx, Player* this, s32 item) {
             underwaterItems |= actionParam == PLAYER_AP_BOOMERANG;
         }
 
+        if (Player_MaskZoraWaterSword(this)) {
+            underwaterItems |= actionParam >= PLAYER_AP_SWORD_MASTER && actionParam <= PLAYER_AP_SWORD_BGS;
+        }
+
         if ((actionParam == PLAYER_AP_NONE) || !(this->stateFlags1 & PLAYER_STATE1_27) ||
             ((this->actor.bgCheckFlags & 1) && underwaterItems) || swimItems)
             {
