@@ -446,6 +446,8 @@ typedef struct {
 #define PLAYER_STATE3_6 (1 << 6)
 #define PLAYER_STATE3_7 (1 << 7)
 
+#define PLAYER_STATE_MASK_SINKING (1 << 0)
+
 typedef void (*PlayerFunc674)(struct Player*, struct GlobalContext*);
 typedef s32(*PlayerFunc82C)(struct Player*, struct GlobalContext*);
 typedef void (*PlayerFuncA74)(struct GlobalContext*, struct Player*);
@@ -627,6 +629,7 @@ typedef struct Player {
     /* 0x0A88 */ Vec3f      unk_A88; // previous body part 0 position
     /* 0x0A94 */ PendingFlag pendingFlag;
     /* 0x0AA0 */ u8         boomerangQuickRecall; // Has the player pressed the boomerang button while it's in the air still?
+    /* 0x0AA1 */ u8         stateFlagsMask;
 } Player; // size = 0xAA1
 
 #endif

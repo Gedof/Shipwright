@@ -5220,7 +5220,7 @@ s32 Camera_Unique9(Camera* camera) {
                     D_8011D3AC = anim->curKeyFrame->unk_01 & 0xF;
                 } else if ((anim->curKeyFrame->unk_01 & 0xF0) == 0xC0) {
                     Camera_UpdateInterface(0xF000 | ((anim->curKeyFrame->unk_01 & 0xF) << 8));
-                } else if (camera->player->stateFlags1 & 0x8000000 && player->currentBoots != PLAYER_BOOTS_IRON) {
+                } else if (camera->player->stateFlags1 & 0x8000000 && (player->currentBoots != PLAYER_BOOTS_IRON && !(player->stateFlagsMask & PLAYER_STATE_MASK_SINKING))) {
                     func_8002DF38(camera->globalCtx, camera->target, 8);
                     osSyncPrintf("camera: demo: player demo set WAIT\n");
                 } else {
@@ -5595,7 +5595,7 @@ s32 Camera_Unique9(Camera* camera) {
         // Set the player's position
         camera->player->actor.world.pos.x = anim->playerPos.x;
         camera->player->actor.world.pos.z = anim->playerPos.z;
-        if (camera->player->stateFlags1 & 0x8000000 && player->currentBoots != PLAYER_BOOTS_IRON) {
+        if (camera->player->stateFlags1 & 0x8000000 && (player->currentBoots != PLAYER_BOOTS_IRON && !(player->stateFlagsMask & PLAYER_STATE_MASK_SINKING))) {
             camera->player->actor.world.pos.y = anim->playerPos.y;
         }
     } else {
@@ -6156,7 +6156,7 @@ s32 Camera_Demo5(Camera* camera) {
 
     sDemo5PrevSfxFrame = camera->globalCtx->state.frames;
 
-    if (camera->player->stateFlags1 & 0x8000000 && (player->currentBoots != PLAYER_BOOTS_IRON)) {
+    if (camera->player->stateFlags1 & 0x8000000 && ((player->currentBoots != PLAYER_BOOTS_IRON && !(player->stateFlagsMask & PLAYER_STATE_MASK_SINKING)))) {
         // swimming, and not iron boots
         player->stateFlags1 |= 0x20000000;
         // env frozen
@@ -7526,7 +7526,7 @@ Vec3s Camera_Update(Camera* camera) {
             }
 
             if ((camera->unk_14C & 1) && (camera->unk_14C & 4) && (!(camera->unk_14C & 0x400)) &&
-                (!(camera->unk_14C & 0x200) || (player->currentBoots == PLAYER_BOOTS_IRON)) &&
+                (!(camera->unk_14C & 0x200) || ((player->currentBoots == PLAYER_BOOTS_IRON || (player->stateFlagsMask & PLAYER_STATE_MASK_SINKING)))) &&
                 (!(camera->unk_14C & (s16)0x8000)) && (playerGroundY != BGCHECK_Y_MIN)) {
                 camDataIdx = Camera_GetDataIdxForPoly(camera, &bgId, playerFloorPoly);
                 if (camDataIdx != -1) {
@@ -7538,7 +7538,7 @@ Vec3s Camera_Update(Camera* camera) {
             }
 
             if (camera->nextCamDataIdx != -1 && (fabsf(curPlayerPosRot.pos.y - playerGroundY) < 2.0f) &&
-                (!(camera->unk_14C & 0x200) || (player->currentBoots == PLAYER_BOOTS_IRON))) {
+                (!(camera->unk_14C & 0x200) || ((player->currentBoots == PLAYER_BOOTS_IRON || (player->stateFlagsMask & PLAYER_STATE_MASK_SINKING))))) {
                 camera->bgCheckId = camera->nextBGCheckId;
                 Camera_ChangeDataIdx(camera, camera->nextCamDataIdx);
                 camera->nextCamDataIdx = -1;

@@ -1586,7 +1586,7 @@ void func_8083328C(GlobalContext* globalCtx, Player* this, LinkAnimationHeader* 
 }
 
 s32 func_808332B8(Player* this) {
-    return (this->stateFlags1 & PLAYER_STATE1_27) && (this->currentBoots != PLAYER_BOOTS_IRON);
+    return (this->stateFlags1 & PLAYER_STATE1_27) && (this->currentBoots != PLAYER_BOOTS_IRON) && !(this->stateFlagsMask & PLAYER_STATE_MASK_SINKING);
 }
 
 s32 func_808332E4(Player* this) {
@@ -2846,10 +2846,16 @@ void func_80835F44(GlobalContext* globalCtx, Player* this, s32 item) {
         ((this->itemActionParam < 0) &&
             ((Player_ActionToSword(actionParam) != 0) || (actionParam == PLAYER_AP_NONE)))) {
 
+        bool underwaterItems = (actionParam == PLAYER_AP_HOOKSHOT) || (actionParam == PLAYER_AP_LONGSHOT);
+
+        bool swimItems = (actionParam >= PLAYER_AP_SHIELD_DEKU && actionParam <= PLAYER_AP_BOOTS_HOVER);
+
+        if (CVar_GetS32("gPoweredMasks", 0) != 0) {
+            swimItems |= (actionParam >= PLAYER_AP_MASK_KEATON) && (actionParam <= PLAYER_AP_MASK_TRUTH);
+        }
         if ((actionParam == PLAYER_AP_NONE) || !(this->stateFlags1 & PLAYER_STATE1_27) ||
-            ((this->actor.bgCheckFlags & 1) &&
-                ((actionParam == PLAYER_AP_HOOKSHOT) || (actionParam == PLAYER_AP_LONGSHOT))) ||
-            ((actionParam >= PLAYER_AP_SHIELD_DEKU) && (actionParam <= PLAYER_AP_BOOTS_HOVER))) {
+            ((this->actor.bgCheckFlags & 1) && underwaterItems) || swimItems)
+            {
 
             if ((globalCtx->bombchuBowlingStatus == 0) &&
                 (((actionParam == PLAYER_AP_STICK) && (AMMO(ITEM_STICK) == 0)) ||
@@ -3999,7 +4005,7 @@ s32 func_808382DC(Player* this, GlobalContext* globalCtx) {
                         SurfaceType_IsWallDamage(&globalCtx->colCtx, this->actor.floorPoly, this->actor.floorBgId) &&
                         (this->unk_A79 >= D_808544F4[sp48])) ||
                     ((sp48 >= 0) &&
-                        ((this->currentTunic != PLAYER_TUNIC_GORON && CVar_GetS32("gSuperTunic", 0) == 0) || (this->unk_A79 >= D_808544F4[sp48])))) {
+                        ((this->currentTunic != PLAYER_TUNIC_GORON && CVar_GetS32("gSuperTunic", 0) == 0) && !Player_MaskGoronHeat(this) || (this->unk_A79 >= D_808544F4[sp48])))) {
                     this->unk_A79 = 0;
                     this->actor.colChkInfo.damage = 4;
                     func_80837C0C(globalCtx, this, 0, 4.0f, 5.0f, this->actor.shape.rot.y, 20);
@@ -5791,9 +5797,15 @@ void func_8083D0A8(GlobalContext* globalCtx, Player* this, f32 arg2) {
 }
 
 s32 func_8083D12C(GlobalContext* globalCtx, Player* this, Input* arg2) {
+
+    bool startDive = (arg2 == NULL) || (CHECK_BTN_ALL(arg2->press.button, BTN_A) && (ABS(this->unk_6C2) < 12000) &&
+        (this->currentBoots != PLAYER_BOOTS_IRON));
+
+    bool toggleSink = Player_MaskZoraSink(this) &&
+        CHECK_BTN_ALL(arg2->cur.button, BTN_R) && CHECK_BTN_ALL(arg2->press.button, BTN_A);
+
     if (!(this->stateFlags1 & PLAYER_STATE1_10) && !(this->stateFlags2 & PLAYER_STATE2_10)) {
-        if ((arg2 == NULL) || (CHECK_BTN_ALL(arg2->press.button, BTN_A) && (ABS(this->unk_6C2) < 12000) &&
-            (this->currentBoots != PLAYER_BOOTS_IRON))) {
+        if (startDive && !toggleSink) {
 
             func_80835C58(globalCtx, this, func_8084DC48, 0);
             func_80832264(globalCtx, this, &gPlayerAnim_003308);
@@ -5850,7 +5862,8 @@ void func_8083D330(GlobalContext* globalCtx, Player* this) {
 }
 
 void func_8083D36C(GlobalContext* globalCtx, Player* this) {
-    if ((this->currentBoots != PLAYER_BOOTS_IRON) || !(this->actor.bgCheckFlags & 1)) {
+    if ((this->currentBoots != PLAYER_BOOTS_IRON && !(this->stateFlagsMask & PLAYER_STATE_MASK_SINKING)) ||
+        !(this->actor.bgCheckFlags & 1)) {
         func_80832564(globalCtx, this);
 
         if ((this->currentBoots != PLAYER_BOOTS_IRON) && (this->stateFlags2 & PLAYER_STATE2_10)) {
@@ -9924,8 +9937,21 @@ void func_808473D4(GlobalContext* globalCtx, Player* this) {
                     sp24 = CLAMP(sp24, 0, 7);
                     doAction = sDiveDoActions[sp24];
                 }
-                else if (sp1C && !(this->stateFlags2 & PLAYER_STATE2_10)) {
+                else if (sp1C && !(this->stateFlags2 & PLAYER_STATE2_10) && 
+                    !(Player_MaskZoraSink(this) &&
+                    !(this->stateFlagsMask & PLAYER_STATE_MASK_SINKING) &&
+                    CHECK_OWNED_EQUIP(EQUIP_BOOTS,1) &&
+                    CHECK_BTN_ALL(sControlInput->cur.button, BTN_R))) {
                     doAction = DO_ACTION_DIVE;
+                }
+                else if (Player_MaskZoraSink(this) && sp1C && 
+                    !(this->stateFlagsMask & PLAYER_STATE_MASK_SINKING) &&
+                    CHECK_BTN_ALL(sControlInput->cur.button, BTN_R)) {
+                    doAction = DO_ACTION_DOWN;
+                } else if (Player_MaskZoraSink(this) && sp1C &&
+                    (this->stateFlagsMask & PLAYER_STATE_MASK_SINKING) &&
+                    CHECK_BTN_ALL(sControlInput->cur.button, BTN_R)) {
+                    doAction = DO_ACTION_RETURN;
                 }
                 else if (!sp1C && (!(this->stateFlags1 & PLAYER_STATE1_22) || func_80833BCC(this) ||
                     !Player_IsChildWithHylianShield(this))) {
@@ -10648,6 +10674,22 @@ void Player_UpdateCommon(Player* this, GlobalContext* globalCtx, Input* input) {
     s32 pad;
 
     sControlInput = input;
+
+    bool toggleSink = Player_MaskZoraSink(this) &&
+                      CHECK_BTN_ALL(input->cur.button, BTN_R) && CHECK_BTN_ALL(input->press.button, BTN_A);
+
+    if (!(this->stateFlags1 & PLAYER_STATE1_27) || !Player_MaskZoraSink(this)) {
+        this->stateFlagsMask &= ~PLAYER_STATE_MASK_SINKING;
+    }
+
+    if (toggleSink) {
+        if (this->stateFlagsMask & PLAYER_STATE_MASK_SINKING) {
+            this->stateFlagsMask &= ~PLAYER_STATE_MASK_SINKING;
+        } else {
+            this->stateFlags2 |= PLAYER_STATE2_10;
+            this->stateFlagsMask |= PLAYER_STATE_MASK_SINKING;
+        }
+    }
 
     if (this->unk_A86 < 0) {
         this->unk_A86++;
@@ -11414,56 +11456,113 @@ void func_8084AEEC(Player* this, f32* arg1, f32 arg2, s16 arg3) {
     Math_ScaledStepToS(&this->currentYaw, arg3, 1600);
 }
 
+void func_8084AEEC_Mult(Player* this, f32* pVelocity, f32 velTarget, f32 maxSpeedMult, f32 incrStepMult, f32 decrStepMult, s16 yawTarget) {
+    f32 incrStep;
+    f32 maxSpeed;
+
+    incrStep = this->skelAnime.curFrame - 10.0f;
+
+    maxSpeed = (R_RUN_SPEED_LIMIT / 100.0f) * 0.8f * maxSpeedMult;
+    if (*pVelocity > maxSpeed) {
+        *pVelocity = maxSpeed;
+    }
+
+    if ((0.0f < incrStep) && (incrStep < 10.0f)) {
+        incrStep *= 6.0f;
+    } else {
+        incrStep = 0.0f;
+        velTarget = 0.0f;
+    }
+
+    f32 decrStep = (fabsf(*pVelocity) * 0.02f) + 0.05f;
+
+    f32 finalTarget = (velTarget * 0.8f);
+    f32 finalIncr = incrStep * incrStepMult;
+    f32 finalDecr = decrStep * decrStepMult;
+
+    Math_AsymStepToF(pVelocity, (velTarget * 0.8f), incrStep * incrStepMult, decrStep * decrStepMult);
+    Math_ScaledStepToS(&this->currentYaw, yawTarget, 1600);
+}
+
+//Water buoyancy
 void func_8084B000(Player* this) {
-    f32 phi_f18;
-    f32 phi_f16;
-    f32 phi_f14;
+    f32 acceleration;
+    f32 playerFloatHeight;
+    f32 maxVelocity;
     f32 yDistToWater;
+    f32 yVelocity;
 
-    phi_f14 = -5.0f;
+    f32 maskMaxFloatVel = 1.0f;
+    f32 maskBootVel = 1.0f;
+    f32 maskBootAcc = 1.0f;
+    f32 maskFloatAcc = 1.0f;
+    f32 maskFloatDec = 1.0f;
 
-    phi_f16 = this->ageProperties->unk_28;
-    if (this->actor.velocity.y < 0.0f) {
-        phi_f16 += 1.0f;
+    bool hasMaskSwim = Player_MaskZoraSwim(this);
+    bool hasMaskSink = Player_MaskZoraSink(this);
+
+    if (hasMaskSwim) {
+        maskMaxFloatVel = 7.0f;
+        maskBootVel = 5.0f;
+        maskBootAcc = 2.0f;
+        maskFloatAcc = 2.0f;
+        maskFloatDec = 3.0f;
     }
 
-    if (this->actor.yDistToWater < phi_f16) {
-        if (this->actor.velocity.y <= 0.0f) {
-            phi_f16 = 0.0f;
-        }
-        else {
-            phi_f16 = this->actor.velocity.y * 0.5f;
-        }
-        phi_f18 = -0.1f - phi_f16;
-    }
-    else {
-        if (!(this->stateFlags1 & PLAYER_STATE1_7) && (this->currentBoots == PLAYER_BOOTS_IRON) &&
-            (this->actor.velocity.y >= -3.0f)) {
-            phi_f18 = -0.2f;
-        }
-        else {
-            phi_f14 = 2.0f;
-            if (this->actor.velocity.y >= 0.0f) {
-                phi_f16 = 0.0f;
-            }
-            else {
-                phi_f16 = this->actor.velocity.y * -0.3f;
-            }
-            phi_f18 = phi_f16 + 0.1f;
+    f32 maxFloatVel = 2.0f * maskMaxFloatVel;
+    f32 maxSurfaceVel = 1.0f;
+    f32 maxSinkVel = -5.0f;
+    f32 bootVelTarget = -3.0f * maskBootVel;
+
+    //maxVelocity = maxSinkVelocity;
+    playerFloatHeight = this->ageProperties->unk_28;
+    yDistToWater = this->actor.yDistToWater;
+    yVelocity = this->actor.velocity.y;
+
+    if (yVelocity < 0) {
+        playerFloatHeight += 1.0f;
         }
 
-        yDistToWater = this->actor.yDistToWater;
+    if (yDistToWater - (hasMaskSwim ? yVelocity : 0) < playerFloatHeight) { // Bob
+        maxVelocity = maxSinkVel;
+        acceleration = -0.1f;
+
+        if (hasMaskSwim && yVelocity > maxSurfaceVel) {
+            acceleration = 0;
+            yVelocity = maxSurfaceVel;
+        }
+        else if (yVelocity > 0) {
+            acceleration += -(yVelocity * 0.5f);
+    }
+        }
+        else {
+        if (!(this->stateFlags1 & PLAYER_STATE1_7) && 
+            (this->currentBoots == PLAYER_BOOTS_IRON || (hasMaskSink && this->stateFlagsMask & PLAYER_STATE_MASK_SINKING)) &&
+            (yVelocity >= bootVelTarget)) { //Sink with boots
+            maxVelocity = bootVelTarget - 2.0f;
+            acceleration = -0.2f * maskBootAcc;
+            }
+        else { //Float
+            maxVelocity = maxFloatVel;
+            acceleration = 0.1f * maskFloatAcc;
+
+            if (yVelocity < 0) {
+                acceleration += fabsf(yVelocity) * 0.3f * maskFloatDec;
+            }
+        }
+
         if (yDistToWater > 100.0f) {
-            this->stateFlags2 |= PLAYER_STATE2_10;
+            this->stateFlags2 |= PLAYER_STATE2_10; //Set "in water"
         }
     }
 
-    this->actor.velocity.y += phi_f18;
+    yVelocity += acceleration;
 
-    if (((this->actor.velocity.y - phi_f14) * phi_f18) > 0) {
-        this->actor.velocity.y = phi_f14;
+    if (((yVelocity - maxVelocity) * acceleration) > 0) {
+        yVelocity = maxVelocity;
     }
 
+    this->actor.velocity.y = yVelocity;
     this->actor.gravity = 0.0f;
 }
 
@@ -12461,6 +12560,20 @@ void func_8084D530(Player* this, f32* arg1, f32 arg2, s16 arg3) {
     func_80832924(this, D_808549D0);
 }
 
+void func_8084D530_Mult(Player* this, f32* pVelocity, f32 velTarget, f32 maxSpeedMult, f32 incrStepMult, f32 decrStepMult, s16 yawTarget) {
+    func_8084AEEC_Mult(this, pVelocity, velTarget, maxSpeedMult, incrStepMult, decrStepMult, yawTarget);
+    func_80832924(this, D_808549D0);
+}
+
+void Player_MaskSwimBoost(Player* this, f32* pVelocity, f32 velTarget, s16 yawTarget) {
+    velTarget *= 2.0f;
+    f32 maxSpeedMult = 2.0f;
+    f32 incrSpeedMult = 2.0f;
+    f32 decrSpeedMult = 1.0f;
+
+    func_8084D530_Mult(this, &this->linearVelocity, velTarget, maxSpeedMult, incrSpeedMult, decrSpeedMult,yawTarget);
+}
+
 void func_8084D574(GlobalContext* globalCtx, Player* this, s16 arg2) {
     func_80835C58(globalCtx, this, func_8084D84C, 0);
     this->actor.shape.rot.y = this->currentYaw = arg2;
@@ -12485,7 +12598,7 @@ void func_8084D610(Player* this, GlobalContext* globalCtx) {
             this->unk_6AD = 0;
         }
 
-        if (this->currentBoots == PLAYER_BOOTS_IRON) {
+        if (this->currentBoots == PLAYER_BOOTS_IRON || (this->stateFlagsMask & PLAYER_STATE_MASK_SINKING)) {
             sp34 = 0.0f;
             sp32 = this->actor.shape.rot.y;
 
@@ -12494,7 +12607,9 @@ void func_8084D610(Player* this, GlobalContext* globalCtx) {
                 func_808328A0(this);
             }
         }
-        else {
+
+        if ((this->currentBoots != PLAYER_BOOTS_IRON) ||
+            Player_MaskZoraSwim(this)) {
             func_80837268(this, &sp34, &sp32, 0.0f, globalCtx);
 
             if (sp34 != 0.0f) {
@@ -12544,15 +12659,22 @@ void func_8084D84C(Player* this, GlobalContext* globalCtx) {
         func_80837268(this, &sp34, &sp32, 0.0f, globalCtx);
 
         temp = this->actor.shape.rot.y - sp32;
-        if ((sp34 == 0.0f) || (ABS(temp) > 0x6000) || (this->currentBoots == PLAYER_BOOTS_IRON)) {
+        if ((sp34 == 0.0f) || (ABS(temp) > 0x6000) ||
+            ((this->currentBoots == PLAYER_BOOTS_IRON) &&
+             !Player_MaskZoraSwim(this))) {
             func_80838F18(globalCtx, this);
         }
         else if (func_80833C04(this)) {
             func_8084D5CC(globalCtx, this);
         }
 
+        //Swim
+        if (Player_MaskZoraSwim(this)) {
+            Player_MaskSwimBoost(this, &this->linearVelocity, sp34, sp32);
+        } else {
         func_8084D530(this, &this->linearVelocity, sp34, sp32);
     }
+}
 }
 
 s32 func_8084D980(GlobalContext* globalCtx, Player* this, f32* arg2, s16* arg3) {
@@ -12618,8 +12740,33 @@ void func_8084DAB4(Player* this, GlobalContext* globalCtx) {
             func_8084D980(globalCtx, this, &sp2C, &sp2A);
         }
 
+        //Z-Target Swim
+        if (Player_MaskZoraSwim(this)) {
+            Player_MaskSwimBoost(this, &this->linearVelocity, sp2C, sp2A);
+        } else {
         func_8084D530(this, &this->linearVelocity, sp2C, sp2A);
     }
+    }
+}
+
+void Player_MaskDiveBoost(GlobalContext* globalCtx, Player* this, f32 arg2) {
+    f32 sp2C;
+    s16 sp2A;
+
+    func_80837268(this, &sp2C, &sp2A, 0.0f, globalCtx);
+
+    f32 swimVelTarget = sp2C * 1.5f;
+    f32 swimMaxSpeed = 1.5f;
+    f32 swimIncrSpeed = 0.025f;
+    f32 swimDecrSpeed = 1.0f;
+
+    f32 diveVelTarget = arg2 * (arg2 < 0 ? 3.0f : 1.5f);
+    f32 diveMaxSpeed = 1.5f;  
+    f32 diveIncrSpeed = arg2 < 0 ? 1.0f : 1.5f;
+    f32 diveDecrSpeed = arg2 < 0 ? 3.0f : 1.5f;
+
+    func_8084AEEC_Mult(this, &this->linearVelocity, swimVelTarget, swimMaxSpeed, swimIncrSpeed, swimDecrSpeed, sp2A);
+    func_8084AEEC_Mult(this, &this->actor.velocity.y, diveVelTarget, diveMaxSpeed, diveIncrSpeed, diveDecrSpeed, sp2A);
 }
 
 void func_8084DBC4(GlobalContext* globalCtx, Player* this, f32 arg2) {
@@ -12663,7 +12810,13 @@ void func_8084DC48(Player* this, GlobalContext* globalCtx) {
 
             if (CHECK_BTN_ALL(sControlInput->cur.button, BTN_A) && !func_8083E5A8(this, globalCtx) &&
                 !(this->actor.bgCheckFlags & 1) && (this->actor.yDistToWater < D_80854784[CUR_UPG_VALUE(UPG_SCALE)])) {
+
+                //Dive down
+                if (Player_MaskZoraSwim(this)) {
+                    Player_MaskDiveBoost(globalCtx, this, -2.0f);
+                } else {
                 func_8084DBC4(globalCtx, this, -2.0f);
+            }
             }
             else {
                 this->unk_84F++;
@@ -12694,9 +12847,14 @@ void func_8084DC48(Player* this, GlobalContext* globalCtx) {
                 sp2C = 8.0f;
             }
 
+            //Dive up
+            if (Player_MaskZoraSwim(this)) {
+                Player_MaskDiveBoost(globalCtx, this, sp2C);
+            } else {
             func_8084DBC4(globalCtx, this, sp2C);
         }
     }
+}
 }
 
 void func_8084DF6C(GlobalContext* globalCtx, Player* this) {
@@ -12794,7 +12952,7 @@ void func_8084E1EC(Player* this, GlobalContext* globalCtx) {
     }
 
     func_8084B000(this);
-    func_8084AEEC(this, &this->linearVelocity, 0.0f, this->actor.shape.rot.y);
+    func_8084AEEC(this, &this->linearVelocity, 0.0f, this->actor.shape.rot.y); //Stop surfacing
 }
 
 void func_8084E30C(Player* this, GlobalContext* globalCtx) {
@@ -12814,6 +12972,7 @@ void func_8084E368(Player* this, GlobalContext* globalCtx) {
         func_80843AE8(globalCtx, this);
     }
 
+    //Drown
     func_8084AEEC(this, &this->linearVelocity, 0.0f, this->actor.shape.rot.y);
 }
 

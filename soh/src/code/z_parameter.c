@@ -952,19 +952,40 @@ void func_80083108(GlobalContext* globalCtx) {
 
                         gSaveContext.buttonStatus[BUTTON_STATUS_INDEX(i)] = BTN_ENABLED;
                     } else if (func_8008F2F8(globalCtx) == 2) {
-                        if ((gSaveContext.equips.buttonItems[i] != ITEM_HOOKSHOT) &&
-                            (gSaveContext.equips.buttonItems[i] != ITEM_LONGSHOT)) {
-                            if (gSaveContext.buttonStatus[BUTTON_STATUS_INDEX(i)] == BTN_ENABLED) {
-                                sp28 = 1;
-                            }
+                        bool underwaterItems = (gSaveContext.equips.buttonItems[i] == ITEM_HOOKSHOT) ||
+                                               (gSaveContext.equips.buttonItems[i] == ITEM_LONGSHOT);
 
-                            gSaveContext.buttonStatus[BUTTON_STATUS_INDEX(i)] = BTN_DISABLED;
-                        } else {
+                        if (CVar_GetS32("gPoweredMasks", 0) != 0) {
+                            underwaterItems |= (gSaveContext.equips.buttonItems[i] >= ITEM_MASK_KEATON) &&
+                                              (gSaveContext.equips.buttonItems[i] <= ITEM_MASK_TRUTH);
+                        }
+                        if (underwaterItems) {
                             if (gSaveContext.buttonStatus[BUTTON_STATUS_INDEX(i)] == BTN_DISABLED) {
                                 sp28 = 1;
                             }
 
                             gSaveContext.buttonStatus[BUTTON_STATUS_INDEX(i)] = BTN_ENABLED;
+                        } else {
+                            if (gSaveContext.buttonStatus[BUTTON_STATUS_INDEX(i)] == BTN_ENABLED) {
+                                sp28 = 1;
+                            }
+
+                            gSaveContext.buttonStatus[BUTTON_STATUS_INDEX(i)] = BTN_DISABLED;
+                        }
+                    } else if (CVar_GetS32("gPoweredMasks", 0) != 0) {
+                        if (gSaveContext.equips.buttonItems[i] >= ITEM_MASK_KEATON &&
+                            gSaveContext.equips.buttonItems[i] <= ITEM_MASK_TRUTH) {
+                            if (gSaveContext.buttonStatus[BUTTON_STATUS_INDEX(i)] == BTN_DISABLED) {
+                                sp28 = 1;
+                            }
+
+                            gSaveContext.buttonStatus[BUTTON_STATUS_INDEX(i)] = BTN_ENABLED;
+                        } else {
+                            if (gSaveContext.buttonStatus[BUTTON_STATUS_INDEX(i)] == BTN_ENABLED) {
+                                sp28 = 1;
+                        }
+
+                            gSaveContext.buttonStatus[BUTTON_STATUS_INDEX(i)] = BTN_DISABLED;
                         }
                     } else {
                         if (gSaveContext.buttonStatus[BUTTON_STATUS_INDEX(i)] == BTN_ENABLED) {
@@ -5720,7 +5741,7 @@ void Interface_Update(GlobalContext* globalCtx) {
             D_80125A58 = 0;
         }
     } else if ((func_8008F2F8(globalCtx) >= 2) && (func_8008F2F8(globalCtx) < 5)) {
-        if (CUR_EQUIP_VALUE(EQUIP_TUNIC) == 3 || CVar_GetS32("gSuperTunic", 0) != 0) {
+        if (CUR_EQUIP_VALUE(EQUIP_TUNIC) == 3 || Player_MaskZoraBreathe(player) || CVar_GetS32("gSuperTunic", 0) != 0) {
             D_80125A58 = 0;
         }
     }
