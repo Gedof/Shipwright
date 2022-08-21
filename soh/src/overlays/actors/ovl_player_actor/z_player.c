@@ -6104,7 +6104,7 @@ void func_8083DFE0(Player* this, f32* arg1, s16* arg2) {
 
     if (this->swordState == 0) {
         float maxSpeed = R_RUN_SPEED_LIMIT / 100.0f;
-        if (CVar_GetS32("gMMBunnyHood", 0) != 0 && this->currentMask == PLAYER_MASK_BUNNY) {
+        if (Player_MaskBunnyMM(this)) {
             maxSpeed *= 1.5f;
         }
         this->linearVelocity = CLAMP(this->linearVelocity, -maxSpeed, maxSpeed);
@@ -7735,7 +7735,7 @@ void func_80842180(Player* this, GlobalContext* globalCtx) {
         func_80837268(this, &sp2C, &sp2A, 0.018f, globalCtx);
 
         if (!func_8083C484(this, &sp2C, &sp2A)) {
-            if (CVar_GetS32("gMMBunnyHood", 0) != 0 && this->currentMask == PLAYER_MASK_BUNNY) {
+            if (Player_MaskBunnyMM(this)) {
                 sp2C *= 1.5f;
             }
             func_8083DF68(this, sp2C, sp2A);
@@ -9663,7 +9663,7 @@ void Player_Init(Actor* thisx, GlobalContext* globalCtx2) {
     func_80835F44(globalCtx, this, ITEM_NONE);
     Player_SetEquipmentData(globalCtx, this);
     this->prevBoots = this->currentBoots;
-    if (CVar_GetS32("gMMBunnyHood", 0)) {
+    if (CVar_GetS32("gPoweredMasks", 0)) {
         if (INV_CONTENT(ITEM_TRADE_CHILD) == ITEM_SOLD_OUT) { sMaskMemory = PLAYER_MASK_NONE; }
         this->currentMask = sMaskMemory;
         for (uint16_t cSlotIndex = 0; cSlotIndex < ARRAY_COUNT(gSaveContext.equips.cButtonSlots); cSlotIndex++) {
