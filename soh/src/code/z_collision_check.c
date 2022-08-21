@@ -3005,6 +3005,7 @@ void CollisionCheck_ApplyDamage(GlobalContext* globalCtx, CollisionCheckContext*
         }
 
         damage = tbl->table[i] & 0xF;
+        damage *= Player_MaskSkullDmg(GET_PLAYER(globalCtx)) ? 2 : 1;
         collider->actor->colChkInfo.damageEffect = tbl->table[i] >> 4 & 0xF;
     }
     if (!(collider->acFlags & AC_HARD)) {

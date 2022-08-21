@@ -3608,7 +3608,7 @@ s32 func_80837B18_modified(GlobalContext* globalCtx, Player* this, s32 damage, u
     s32 modifiedDamage = damage;
     if (modified)
     {
-       modifiedDamage *= (1 << CVar_GetS32("gDamageMul", 0));
+        modifiedDamage *= (1 << CVar_GetS32("gDamageMul", 0)) * Player_MaskGetDamageTaken(this);
     }
 
     return Health_ChangeBy(globalCtx, modifiedDamage);
@@ -3841,7 +3841,8 @@ s32 func_808382DC(Player* this, GlobalContext* globalCtx) {
 
     if (this->unk_A86 != 0) {
         if (!Player_InBlockingCsMode(globalCtx, this)) {
-            Player_InflictDamageModified(globalCtx, -16 * (1 << CVar_GetS32("gVoidDamageMul", 0)), false);
+            Player_InflictDamageModified(
+                globalCtx, -16 * (1 << CVar_GetS32("gVoidDamageMul", 0)) * Player_MaskGetDamageTaken(this), false);
             this->unk_A86 = 0;
         }
     }
