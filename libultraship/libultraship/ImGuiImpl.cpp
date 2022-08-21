@@ -1204,8 +1204,6 @@ namespace SohImGui {
                         Tooltip("Prevent forced Navi conversations");
                         PaddedEnhancementCheckbox("No Skulltula Freeze", "gSkulltulaFreeze", true, false);
                         Tooltip("Stops the game from freezing the player when picking up Gold Skulltulas");
-                        PaddedEnhancementCheckbox("MM Bunny Hood", "gMMBunnyHood", true, false);
-                        Tooltip("Wearing the Bunny Hood grants a speed increase like in Majora's Mask");
                         PaddedEnhancementCheckbox("Fast Chests", "gFastChests", true, false);
                         Tooltip("Kick open every chest");
                         PaddedEnhancementCheckbox("Skip Pickup Messages", "gFastDrops", true, false);
@@ -1394,6 +1392,7 @@ namespace SohImGui {
                     Tooltip("Injects Golden Skulltula total count in pickup messages");
                     PaddedEnhancementCheckbox("Pull grave during the day", "gDayGravePull", true, false);
                     Tooltip("Allows graves to be pulled when child during the day");
+
                     ImGui::EndMenu();
                 }
 
@@ -1708,6 +1707,158 @@ namespace SohImGui {
                 Tooltip("This allows you to put up your shield with any two-handed weapon in hand except for Deku Sticks");
                 PaddedEnhancementCheckbox("Time Sync", "gTimeSync", true, false);
                 Tooltip("This syncs the ingame time with the real world time");
+
+                PaddedEnhancementCheckbox("Powered Masks", "gPoweredMasks");
+                Tooltip("Enable different effects for wearing each mask");
+
+                if (CVar_GetS32("gPoweredMasks", 0) != 0 && ImGui::BeginMenu("    Masks Options"))
+                {
+
+                    if (ImGui::BeginMenu("Keaton Mask"))
+                    {
+                        EnhancementCheckbox("Better Rupees", "gKeatonRupees");
+                        Tooltip("Wearing the Keaton Mask doubles the value of every rupee collected");
+
+                        PaddedEnhancementCheckbox("Better Drops", "gKeatonDrops");
+                        Tooltip("Wearing the Keaton Mask reworks the drop table to favor the currently equipped items");
+
+                        if (CVar_GetS32("gMasksAdult", 0) == 0)
+                        {
+                            PaddedEnhancementCheckbox("Wearable as adult", "gKeatonAdult");
+                            Tooltip("You can wear the Keaton Mask as adult");
+                        }
+
+                        ImGui::EndMenu();
+                    }
+
+                    if (ImGui::BeginMenu("Skull Mask"))
+                    {
+                        EnhancementCheckbox("Double Damage", "gSkullDmg");
+                        Tooltip("Wearing the Skull Mask doubles all the damage you inflict and take");
+
+
+                        if (CVar_GetS32("gMasksAdult", 0) == 0)
+                        {
+                            PaddedEnhancementCheckbox("Wearable as adult", "gSkullAdult");
+                            Tooltip("You can wear the Skull Mask as adult");
+                        }
+
+                        ImGui::EndMenu();
+                    }
+
+                    if (ImGui::BeginMenu("Spooky Mask"))
+                    {
+                        EnhancementCheckbox("Unbreakable Sticks", "gSpookyStick");
+                        Tooltip("Wearing the Skull Mask makes Sticks and Giant's Knife unbreakable");
+
+                        PaddedEnhancementCheckbox("Fireproof Deku Shield", "gSpookyShield");
+                        Tooltip("Wearing the Skull Mask prevents the Deku Shield from burning on contact with fire");
+
+                        if (CVar_GetS32("gMasksAdult", 0) == 0)
+                        {
+                            PaddedEnhancementCheckbox("Wearable as adult", "gSpookyAdult");
+                            Tooltip("You can wear the Spooky Mask as adult");
+                        }
+
+                        ImGui::EndMenu();
+                    }
+
+                    if (ImGui::BeginMenu("Bunny Hood"))
+                    {
+                        EnhancementCheckbox("MM Bunny Hood", "gMMBunnyHood");
+                        Tooltip("Wearing the Bunny Hood grants a speed increase like in Majora's Mask");
+
+                        if (CVar_GetS32("gMasksAdult", 0) == 0)
+                        {
+                            PaddedEnhancementCheckbox("Wearable as adult", "gBunnyAdult");
+                            Tooltip("You can wear the Bunny Mask as adult");
+                        }
+
+                        ImGui::EndMenu();
+                    }
+
+                    if (ImGui::BeginMenu("Goron Mask"))
+                    {
+                        EnhancementCheckbox("Double Defense", "gGoronMaskDef");
+                        Tooltip("Wearing the Goron Mask halves all damage taken, stacks with Double Defense");
+
+                        PaddedEnhancementCheckbox("Resist Heat", "gGoronMaskHeat");
+                        Tooltip("Wearing the Goron Mask has the effects of the Goron Tunic. Needs Goron Tunic in the inventory.");
+
+                        if (CVar_GetS32("gMasksAdult", 0) == 0)
+                        {
+                            PaddedEnhancementCheckbox("Wearable as adult", "gGoronMaskAdult");
+                            Tooltip("You can wear the Goron Mask as adult");
+                        }
+
+                        ImGui::EndMenu();
+                    }
+
+                    if (ImGui::BeginMenu("Zora Mask"))
+                    {
+                        EnhancementCheckbox("Faster water movement", "gZoraMaskSwim");
+                        Tooltip("Wearing the Zora Mask makes all water movement faster: Swimming, Diving, Sinking and Floating");
+
+                        PaddedEnhancementCheckbox("Sink button", "gZoraMaskSink");
+                        Tooltip("Wearing the Zora Mask and holding R while in water allows you to press A to toggle between sinking and floating. Needs Iron Boots in the inventory.");
+
+                        if (CVar_GetS32("gZoraMaskSink", 0) != 0)
+                        {
+                            PaddedEnhancementCheckbox("Sink as Child", "gZoraMaskSinkChild");
+                            Tooltip("Enable sinking as child");
+                        }
+
+                        PaddedEnhancementCheckbox("Breathe Underwater", "gZoraMaskBreathe");
+                        Tooltip("Wearing the Zora Mask has the effects of the Zora Tunic. Needs Zora Tunic in the inventory.");
+
+                        PaddedEnhancementCheckbox("Underwater Boomerang", "gZoraMaskWaterBoom");
+                        Tooltip("Enables using Boomerang underwater");
+
+                        PaddedEnhancementCheckbox("Underwater Sword", "gZoraMaskWaterSword");
+                        Tooltip("Enables using Sword underwater");
+
+                        if (CVar_GetS32("gMasksAdult", 0) == 0)
+                        {
+                            PaddedEnhancementCheckbox("Wearable as adult", "gZoraMaskAdult");
+                            Tooltip("You can wear the Zora Mask as adult");
+                        }
+
+                        ImGui::EndMenu();
+                    }
+
+                    if (ImGui::BeginMenu("Gerudo Mask"))
+                    {
+                        EnhancementCheckbox("Stealth", "gGerudoMaskStealth");
+                        Tooltip("Wearing the Gerudo Mask makes you invisible to all enemies and guards");
+
+                        if (CVar_GetS32("gMasksAdult", 0) == 0)
+                        {
+                            PaddedEnhancementCheckbox("Wearable as adult", "gGerudoMaskAdult");
+                            Tooltip("You can wear the Gerudo Mask as adult");
+                        }
+
+                        ImGui::EndMenu();
+                    }
+
+                    if (ImGui::BeginMenu("Mask of Truth"))
+                    {
+                        EnhancementCheckbox("Magic Regeneration", "gTruthMagicRegen");
+                        Tooltip("Wearing the Mask of Truth grants a moderate and steady Magic regeneration");
+
+                        if (CVar_GetS32("gMasksAdult", 0) == 0)
+                        {
+                            PaddedEnhancementCheckbox("Wearable as adult", "gTruthAdult");
+                            Tooltip("You can wear the Mask of Truth as adult");
+                        }
+
+                        ImGui::EndMenu();
+                    }
+
+                    PaddedEnhancementCheckbox("All masks as adult", "gMasksAdult");
+                    Tooltip("Makes all masks wearable as adult");
+
+                    ImGui::EndMenu();
+                }
 
                 {
                     static int32_t betaQuestEnabled = CVar_GetS32("gEnableBetaQuest", 0);
