@@ -594,6 +594,7 @@ s32 Player_GetExplosiveHeld(Player* this) {
     return Player_ActionToExplosive(this, this->heldItemActionParam);
 }
 
+bool Player_MaskHasPower(Player* this, PlayerMask mask) {
 s32 func_8008F2BC(Player* this, s32 actionParam) {
     s32 sword = 0;
 

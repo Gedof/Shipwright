@@ -1109,6 +1109,26 @@ s32 Player_ActionToBottle(Player* player, s32 actionParam);
 s32 Player_GetBottleHeld(Player* player);
 s32 Player_ActionToExplosive(Player* player, s32 actionParam);
 s32 Player_GetExplosiveHeld(Player* player);
+
+bool Player_MaskHasPower(Player* player, PlayerMask mask);
+bool Player_MaskAdult(ItemID mask);
+bool Player_MaskKeatonRupee(Player* player);
+bool Player_MaskKeatonDrops(Player* player);
+bool Player_MaskSkullDmg(Player* player);
+bool Player_MaskSpookyStick(Player* player);
+bool Player_MaskSpookyShield(Player* player);
+bool Player_MaskBunnyMM(Player* player);
+bool Player_MaskGoronDef(Player* player);
+bool Player_MaskGoronHeat(Player* player);
+f32 Player_MaskGetDamageTaken(Player* player);
+bool Player_MaskZoraSwim(Player* player);
+bool Player_MaskZoraSink(Player* player);
+bool Player_MaskZoraBreathe(Player* player);
+bool Player_MaskZoraWaterBoom(Player* player);
+bool Player_MaskZoraWaterSword(Player* player);
+bool Player_MaskGerudoStealth(Player* player);
+bool Player_MaskTruthMagicRegen(Player* player);
+
 s32 func_8008F2BC(Player* player, s32 actionParam);
 s32 func_8008F2F8(GlobalContext* globalCtx);
 void func_8008F470(GlobalContext* globalCtx, void** skeleton, Vec3s* jointTable, s32 dListCount, s32 lod, s32 tunic,
