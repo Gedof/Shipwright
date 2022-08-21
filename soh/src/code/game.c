@@ -430,6 +430,22 @@ void GameState_Update(GameState* gameState) {
     //since our CVar is same value and properly default to 0 there is not problems doing this in single line.
     gSaveContext.language = CVar_GetS32("gLanguages", 0);
 
+    //Magic Regen Mask
+    if (gGlobalCtx != NULL && Player_MaskTruthMagicRegen(GET_PLAYER(gGlobalCtx))) {
+        if ((gGlobalCtx->pauseCtx.state == 0) && (gGlobalCtx->pauseCtx.debugState == 0) &&
+            (gGlobalCtx->msgCtx.msgMode == MSGMODE_NONE) && (gGlobalCtx->sceneLoadFlag == 0) &&
+            (gGlobalCtx->gameOverCtx.state == GAMEOVER_INACTIVE) && (gGlobalCtx->transitionMode == 0) &&
+            ((gGlobalCtx->csCtx.state == CS_STATE_IDLE) || !Player_InCsMode(gGlobalCtx))) {
+
+            if (gSaveContext.magicAcquired && gSaveContext.magic != (gSaveContext.doubleMagic + 1) * 0x30 &&
+                gSaveContext.unk_13F0 == 0) {
+                if (gameState->frames % 10 == 0) {
+                    gSaveContext.magic++;
+                }
+            }
+        }
+    }
+
     gameState->frames++;
 }
 
