@@ -959,6 +959,11 @@ void func_80083108(GlobalContext* globalCtx) {
                             underwaterItems |= (gSaveContext.equips.buttonItems[i] >= ITEM_MASK_KEATON) &&
                                               (gSaveContext.equips.buttonItems[i] <= ITEM_MASK_TRUTH);
                         }
+
+                        if (Player_MaskZoraWaterBoom(player)) {
+                            underwaterItems |= gSaveContext.equips.buttonItems[i] == ITEM_BOOMERANG;
+                        }
+
                         if (underwaterItems) {
                             if (gSaveContext.buttonStatus[BUTTON_STATUS_INDEX(i)] == BTN_DISABLED) {
                                 sp28 = 1;

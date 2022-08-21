@@ -2853,6 +2853,11 @@ void func_80835F44(GlobalContext* globalCtx, Player* this, s32 item) {
         if (CVar_GetS32("gPoweredMasks", 0) != 0) {
             swimItems |= (actionParam >= PLAYER_AP_MASK_KEATON) && (actionParam <= PLAYER_AP_MASK_TRUTH);
         }
+
+        if (Player_MaskZoraWaterBoom(this)) {
+            underwaterItems |= actionParam == PLAYER_AP_BOOMERANG;
+        }
+
         if ((actionParam == PLAYER_AP_NONE) || !(this->stateFlags1 & PLAYER_STATE1_27) ||
             ((this->actor.bgCheckFlags & 1) && underwaterItems) || swimItems)
             {
