@@ -8406,7 +8406,7 @@ static struct_80832924 D_808545F0[] = {
 };
 
 void func_80843CEC(Player* this, GlobalContext* globalCtx) {
-    if (this->currentTunic != PLAYER_TUNIC_GORON && CVar_GetS32("gSuperTunic", 0) == 0) {
+    if (this->currentTunic != PLAYER_TUNIC_GORON && CVar_GetS32("gSuperTunic", 0) == 0 && !Player_MaskGoronHeat(this)) {
         if ((globalCtx->roomCtx.curRoom.behaviorType2 == ROOM_BEHAVIOR_TYPE2_3) || (D_808535E4 == 9) ||
             ((func_80838144(D_808535E4) >= 0) &&
                 !SurfaceType_IsWallDamage(&globalCtx->colCtx, this->actor.floorPoly, this->actor.floorBgId))) {
@@ -8473,7 +8473,9 @@ s32 func_80843E64(GlobalContext* globalCtx, Player* this) {
 
         impactInfo = &D_80854600[impactIndex];
 
-        if (Player_InflictDamageModified(globalCtx, impactInfo->damage * (1 << CVar_GetS32("gFallDamageMul", 0)), false)) {
+        if (Player_InflictDamageModified(
+                globalCtx,
+                impactInfo->damage * (1 << CVar_GetS32("gFallDamageMul", 0)) * Player_MaskGetDamageTaken(this), false)) {
             return -1;
         }
 
@@ -10468,7 +10470,7 @@ void func_80848C74(GlobalContext* globalCtx, Player* this) {
     s32 sp58;
     s32 sp54;
 
-    if (this->currentTunic == PLAYER_TUNIC_GORON || CVar_GetS32("gSuperTunic", 0) != 0) {
+    if (this->currentTunic == PLAYER_TUNIC_GORON || CVar_GetS32("gSuperTunic", 0) != 0 || Player_MaskGoronHeat(this)) {
         sp54 = 20;
     }
     else {

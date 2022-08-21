@@ -5716,7 +5716,7 @@ void Interface_Update(GlobalContext* globalCtx) {
     D_80125A58 = func_8008F2F8(globalCtx);
 
     if (D_80125A58 == 1) {
-        if (CUR_EQUIP_VALUE(EQUIP_TUNIC) == 2 || CVar_GetS32("gSuperTunic", 0) != 0) {
+        if (CUR_EQUIP_VALUE(EQUIP_TUNIC) == 2 || Player_MaskGoronHeat(player) || CVar_GetS32("gSuperTunic", 0) != 0) {
             D_80125A58 = 0;
         }
     } else if ((func_8008F2F8(globalCtx) >= 2) && (func_8008F2F8(globalCtx) < 5)) {
