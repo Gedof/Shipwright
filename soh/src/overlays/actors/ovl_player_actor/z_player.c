@@ -3803,7 +3803,11 @@ s32 func_8083816C(s32 arg0) {
 }
 
 void func_8083819C(Player* this, GlobalContext* globalCtx) {
-    if (this->currentShield == PLAYER_SHIELD_DEKU && (CVar_GetS32("gFireproofDekuShield", 0) == 0)) {
+
+    bool fireProofShield = CVar_GetS32("gFireproofDekuShield", 0) != 0
+        || Player_MaskSpookyShield(this);
+
+    if (this->currentShield == PLAYER_SHIELD_DEKU && !fireProofShield) {
         Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_ITEM_SHIELD, this->actor.world.pos.x,
             this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, 1);
         Inventory_DeleteEquipment(globalCtx, EQUIP_SHIELD);
@@ -7940,11 +7944,14 @@ void func_80842A88(GlobalContext* globalCtx, Player* this) {
 s32 func_80842AC4(GlobalContext* globalCtx, Player* this) {
     if ((this->heldItemActionParam == PLAYER_AP_STICK) && (this->unk_85C > 0.5f)) {
         if (AMMO(ITEM_STICK) != 0) {
+            bool unbreakableStick = Player_MaskSpookyStick(this);
+            if (!unbreakableStick) {
             EffectSsStick_Spawn(globalCtx, &this->bodyPartsPos[PLAYER_BODYPART_R_HAND],
                 this->actor.shape.rot.y + 0x8000);
             this->unk_85C = 0.5f;
             func_80842A88(globalCtx, this);
             func_8002F7DC(&this->actor, NA_SE_IT_WOODSTICK_BROKEN);
+        }
         }
 
         return 1;
@@ -7956,7 +7963,10 @@ s32 func_80842AC4(GlobalContext* globalCtx, Player* this) {
 s32 func_80842B7C(GlobalContext* globalCtx, Player* this) {
     if (this->heldItemActionParam == PLAYER_AP_SWORD_BGS) {
         if (!gSaveContext.bgsFlag && (gSaveContext.swordHealth > 0.0f)) {
-            if ((gSaveContext.swordHealth -= 1.0f) <= 0.0f) {
+
+            bool unbreakableSword = Player_MaskSpookyStick(this);
+
+            if (!unbreakableSword && (gSaveContext.swordHealth -= 1.0f) <= 0.0f) {
                 EffectSsStick_Spawn(globalCtx, &this->bodyPartsPos[PLAYER_BODYPART_R_HAND],
                     this->actor.shape.rot.y + 0x8000);
                 func_800849EC(globalCtx);
