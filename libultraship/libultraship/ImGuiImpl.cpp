@@ -1708,7 +1708,7 @@ namespace SohImGui {
                 PaddedEnhancementCheckbox("Time Sync", "gTimeSync", true, false);
                 Tooltip("This syncs the ingame time with the real world time");
 
-                PaddedEnhancementCheckbox("Powered Masks", "gPoweredMasks");
+                PaddedEnhancementCheckbox("Powered Masks", "gPoweredMasks", true, false);
                 Tooltip("Enable different effects for wearing each mask");
 
                 if (CVar_GetS32("gPoweredMasks", 0) != 0 && ImGui::BeginMenu("    Masks Options"))
@@ -1719,12 +1719,12 @@ namespace SohImGui {
                         EnhancementCheckbox("Better Rupees", "gKeatonRupees");
                         Tooltip("Wearing the Keaton Mask doubles the value of every rupee collected");
 
-                        PaddedEnhancementCheckbox("Better Drops", "gKeatonDrops");
+                        PaddedEnhancementCheckbox("Better Drops", "gKeatonDrops", true, false);
                         Tooltip("Wearing the Keaton Mask reworks the drop table to favor the currently equipped items");
 
                         if (CVar_GetS32("gMasksAdult", 0) == 0)
                         {
-                            PaddedEnhancementCheckbox("Wearable as adult", "gKeatonAdult");
+                            PaddedEnhancementCheckbox("Wearable as adult", "gKeatonAdult", true, false);
                             Tooltip("You can wear the Keaton Mask as adult");
                         }
 
@@ -1739,7 +1739,7 @@ namespace SohImGui {
 
                         if (CVar_GetS32("gMasksAdult", 0) == 0)
                         {
-                            PaddedEnhancementCheckbox("Wearable as adult", "gSkullAdult");
+                            PaddedEnhancementCheckbox("Wearable as adult", "gSkullAdult", true, false);
                             Tooltip("You can wear the Skull Mask as adult");
                         }
 
@@ -1751,12 +1751,12 @@ namespace SohImGui {
                         EnhancementCheckbox("Unbreakable Sticks", "gSpookyStick");
                         Tooltip("Wearing the Skull Mask makes Sticks and Giant's Knife unbreakable");
 
-                        PaddedEnhancementCheckbox("Fireproof Deku Shield", "gSpookyShield");
+                        PaddedEnhancementCheckbox("Fireproof Deku Shield", "gSpookyShield", true, false);
                         Tooltip("Wearing the Skull Mask prevents the Deku Shield from burning on contact with fire");
 
                         if (CVar_GetS32("gMasksAdult", 0) == 0)
                         {
-                            PaddedEnhancementCheckbox("Wearable as adult", "gSpookyAdult");
+                            PaddedEnhancementCheckbox("Wearable as adult", "gSpookyAdult", true, false);
                             Tooltip("You can wear the Spooky Mask as adult");
                         }
 
@@ -1770,7 +1770,7 @@ namespace SohImGui {
 
                         if (CVar_GetS32("gMasksAdult", 0) == 0)
                         {
-                            PaddedEnhancementCheckbox("Wearable as adult", "gBunnyAdult");
+                            PaddedEnhancementCheckbox("Wearable as adult", "gBunnyAdult", true, false);
                             Tooltip("You can wear the Bunny Mask as adult");
                         }
 
@@ -1782,12 +1782,12 @@ namespace SohImGui {
                         EnhancementCheckbox("Double Defense", "gGoronMaskDef");
                         Tooltip("Wearing the Goron Mask halves all damage taken, stacks with Double Defense");
 
-                        PaddedEnhancementCheckbox("Resist Heat", "gGoronMaskHeat");
+                        PaddedEnhancementCheckbox("Resist Heat", "gGoronMaskHeat", true, false);
                         Tooltip("Wearing the Goron Mask has the effects of the Goron Tunic. Needs Goron Tunic in the inventory.");
 
                         if (CVar_GetS32("gMasksAdult", 0) == 0)
                         {
-                            PaddedEnhancementCheckbox("Wearable as adult", "gGoronMaskAdult");
+                            PaddedEnhancementCheckbox("Wearable as adult", "gGoronMaskAdult", true, false);
                             Tooltip("You can wear the Goron Mask as adult");
                         }
 
@@ -1799,27 +1799,27 @@ namespace SohImGui {
                         EnhancementCheckbox("Faster water movement", "gZoraMaskSwim");
                         Tooltip("Wearing the Zora Mask makes all water movement faster: Swimming, Diving, Sinking and Floating");
 
-                        PaddedEnhancementCheckbox("Sink button", "gZoraMaskSink");
+                        PaddedEnhancementCheckbox("Sink button", "gZoraMaskSink", true, false);
                         Tooltip("Wearing the Zora Mask and holding R while in water allows you to press A to toggle between sinking and floating. Needs Iron Boots in the inventory.");
 
                         if (CVar_GetS32("gZoraMaskSink", 0) != 0)
                         {
-                            PaddedEnhancementCheckbox("Sink as Child", "gZoraMaskSinkChild");
+                            PaddedEnhancementCheckbox("Sink as Child", "gZoraMaskSinkChild", true, false);
                             Tooltip("Enable sinking as child");
                         }
 
-                        PaddedEnhancementCheckbox("Breathe Underwater", "gZoraMaskBreathe");
+                        PaddedEnhancementCheckbox("Breathe Underwater", "gZoraMaskBreathe", true, false);
                         Tooltip("Wearing the Zora Mask has the effects of the Zora Tunic. Needs Zora Tunic in the inventory.");
 
-                        PaddedEnhancementCheckbox("Underwater Boomerang", "gZoraMaskWaterBoom");
+                        PaddedEnhancementCheckbox("Underwater Boomerang", "gZoraMaskWaterBoom", true, false);
                         Tooltip("Enables using Boomerang underwater");
 
-                        PaddedEnhancementCheckbox("Underwater Sword", "gZoraMaskWaterSword");
+                        PaddedEnhancementCheckbox("Underwater Sword", "gZoraMaskWaterSword", true, false);
                         Tooltip("Enables using Sword underwater");
 
                         if (CVar_GetS32("gMasksAdult", 0) == 0)
                         {
-                            PaddedEnhancementCheckbox("Wearable as adult", "gZoraMaskAdult");
+                            PaddedEnhancementCheckbox("Wearable as adult", "gZoraMaskAdult", true, false);
                             Tooltip("You can wear the Zora Mask as adult");
                         }
 
@@ -1833,7 +1833,7 @@ namespace SohImGui {
 
                         if (CVar_GetS32("gMasksAdult", 0) == 0)
                         {
-                            PaddedEnhancementCheckbox("Wearable as adult", "gGerudoMaskAdult");
+                            PaddedEnhancementCheckbox("Wearable as adult", "gGerudoMaskAdult", true, false);
                             Tooltip("You can wear the Gerudo Mask as adult");
                         }
 
@@ -1847,14 +1847,14 @@ namespace SohImGui {
 
                         if (CVar_GetS32("gMasksAdult", 0) == 0)
                         {
-                            PaddedEnhancementCheckbox("Wearable as adult", "gTruthAdult");
+                            PaddedEnhancementCheckbox("Wearable as adult", "gTruthAdult", true, false);
                             Tooltip("You can wear the Mask of Truth as adult");
                         }
 
                         ImGui::EndMenu();
                     }
 
-                    PaddedEnhancementCheckbox("All masks as adult", "gMasksAdult");
+                    PaddedEnhancementCheckbox("All masks as adult", "gMasksAdult", true, false);
                     Tooltip("Makes all masks wearable as adult");
 
                     ImGui::EndMenu();
