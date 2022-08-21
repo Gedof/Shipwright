@@ -1,3 +1,5 @@
+#include <math.h>
+#include <string.h>
 #include "global.h"
 #include "overlays/actors/ovl_En_Elf/z_en_elf.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
@@ -73,134 +75,143 @@ static void* sItemDropTex[] = {
 };
 
 static u8 sItemDropIds[] = {
+    //0
     ITEM00_RUPEE_GREEN,
     ITEM00_RUPEE_BLUE,
-    0xFF,
-    0xFF,
+    ITEM00_NONE,
+    ITEM00_NONE,
     ITEM00_RUPEE_BLUE,
     ITEM00_RUPEE_GREEN,
     ITEM00_MAGIC_SMALL,
     ITEM00_HEART,
     ITEM00_HEART,
-    0xFF,
+    ITEM00_NONE,
     ITEM00_MAGIC_SMALL,
     ITEM00_FLEXIBLE,
     ITEM00_SEEDS,
     ITEM00_SEEDS,
-    0xFF,
+    ITEM00_NONE,
     ITEM00_RUPEE_BLUE,
+    //1
     ITEM00_RUPEE_GREEN,
     ITEM00_MAGIC_SMALL,
     ITEM00_RUPEE_GREEN,
     ITEM00_RUPEE_BLUE,
     ITEM00_HEART,
-    0xFF,
+    ITEM00_NONE,
     ITEM00_HEART,
-    0xFF,
+    ITEM00_NONE,
     ITEM00_FLEXIBLE,
-    0xFF,
+    ITEM00_NONE,
     ITEM00_BOMBS_A,
-    0xFF,
+    ITEM00_NONE,
     ITEM00_SEEDS,
-    0xFF,
-    0xFF,
+    ITEM00_NONE,
+    ITEM00_NONE,
     ITEM00_MAGIC_SMALL,
+    //2
     ITEM00_RUPEE_GREEN,
     ITEM00_RUPEE_GREEN,
     ITEM00_MAGIC_SMALL,
-    0xFF,
+    ITEM00_NONE,
     ITEM00_HEART,
-    0xFF,
-    0xFF,
+    ITEM00_NONE,
+    ITEM00_NONE,
     ITEM00_HEART,
-    0xFF,
+    ITEM00_NONE,
     ITEM00_SEEDS,
     ITEM00_SEEDS,
-    0xFF,
+    ITEM00_NONE,
     ITEM00_BOMBS_A,
-    0xFF,
+    ITEM00_NONE,
     ITEM00_FLEXIBLE,
     ITEM00_MAGIC_SMALL,
+    //3
     ITEM00_RUPEE_GREEN,
     ITEM00_RUPEE_GREEN,
     ITEM00_NUTS,
-    0xFF,
+    ITEM00_NONE,
     ITEM00_SEEDS,
     ITEM00_SEEDS,
     ITEM00_NUTS,
     ITEM00_HEART,
     ITEM00_HEART,
     ITEM00_SEEDS,
-    0xFF,
+    ITEM00_NONE,
     ITEM00_FLEXIBLE,
-    0xFF,
-    0xFF,
-    0xFF,
-    0xFF,
+    ITEM00_NONE,
+    ITEM00_NONE,
+    ITEM00_NONE,
+    ITEM00_NONE,
+    //4
     ITEM00_RUPEE_GREEN,
     ITEM00_RUPEE_GREEN,
     ITEM00_SEEDS,
     ITEM00_BOMBS_A,
     ITEM00_MAGIC_SMALL,
     ITEM00_BOMBS_A,
-    0xFF,
-    0xFF,
+    ITEM00_NONE,
+    ITEM00_NONE,
     ITEM00_HEART,
-    0xFF,
-    0xFF,
+    ITEM00_NONE,
+    ITEM00_NONE,
     ITEM00_HEART,
     ITEM00_HEART,
-    0xFF,
-    0xFF,
+    ITEM00_NONE,
+    ITEM00_NONE,
     ITEM00_MAGIC_SMALL,
+    //5
     ITEM00_RUPEE_GREEN,
     ITEM00_MAGIC_SMALL,
     ITEM00_RUPEE_GREEN,
-    0xFF,
+    ITEM00_NONE,
     ITEM00_RUPEE_BLUE,
-    0xFF,
-    0xFF,
+    ITEM00_NONE,
+    ITEM00_NONE,
     ITEM00_HEART,
-    0xFF,
-    0xFF,
+    ITEM00_NONE,
+    ITEM00_NONE,
     ITEM00_HEART,
     ITEM00_FLEXIBLE,
     ITEM00_SEEDS,
     ITEM00_SEEDS,
-    0xFF,
+    ITEM00_NONE,
     ITEM00_MAGIC_SMALL,
+    //6
     ITEM00_RUPEE_GREEN,
     ITEM00_RUPEE_BLUE,
-    0xFF,
+    ITEM00_NONE,
     ITEM00_RUPEE_GREEN,
-    0xFF,
+    ITEM00_NONE,
     ITEM00_HEART,
-    0xFF,
-    0xFF,
+    ITEM00_NONE,
+    ITEM00_NONE,
     ITEM00_BOMBS_A,
     ITEM00_ARROWS_SMALL,
-    0xFF,
+    ITEM00_NONE,
     ITEM00_ARROWS_MEDIUM,
     ITEM00_MAGIC_SMALL,
     ITEM00_FLEXIBLE,
-    0xFF,
+    ITEM00_NONE,
     ITEM00_MAGIC_LARGE,
+    //7
     ITEM00_RUPEE_GREEN,
-    0xFF,
+    ITEM00_NONE,
     ITEM00_RUPEE_BLUE,
-    0xFF,
+    ITEM00_NONE,
     ITEM00_RUPEE_GREEN,
     ITEM00_HEART,
     ITEM00_FLEXIBLE,
     ITEM00_BOMBS_A,
     ITEM00_ARROWS_SMALL,
-    0xFF,
-    0xFF,
-    0xFF,
+    ITEM00_NONE,
+    ITEM00_NONE,
+    ITEM00_NONE,
     ITEM00_MAGIC_SMALL,
-    0xFF,
-    0xFF,
+    ITEM00_NONE,
+    ITEM00_NONE,
     ITEM00_MAGIC_LARGE,
+    //8
     ITEM00_ARROWS_LARGE,
     ITEM00_ARROWS_MEDIUM,
     ITEM00_ARROWS_MEDIUM,
@@ -217,6 +228,7 @@ static u8 sItemDropIds[] = {
     ITEM00_ARROWS_MEDIUM,
     ITEM00_ARROWS_LARGE,
     ITEM00_ARROWS_LARGE,
+    //9
     ITEM00_MAGIC_LARGE,
     ITEM00_MAGIC_SMALL,
     ITEM00_MAGIC_SMALL,
@@ -233,22 +245,24 @@ static u8 sItemDropIds[] = {
     ITEM00_MAGIC_SMALL,
     ITEM00_MAGIC_SMALL,
     ITEM00_MAGIC_LARGE,
+    //10
     ITEM00_BOMBS_A,
-    0xFF,
+    ITEM00_NONE,
     ITEM00_BOMBS_A,
-    0xFF,
+    ITEM00_NONE,
     ITEM00_BOMBS_A,
     ITEM00_FLEXIBLE,
     ITEM00_BOMBS_A,
     ITEM00_BOMBS_A,
     ITEM00_BOMBS_A,
-    0xFF,
-    0xFF,
-    0xFF,
-    0xFF,
+    ITEM00_NONE,
+    ITEM00_NONE,
+    ITEM00_NONE,
+    ITEM00_NONE,
     ITEM00_BOMBS_A,
-    0xFF,
+    ITEM00_NONE,
     ITEM00_BOMBS_A,
+    //11
     ITEM00_HEART,
     ITEM00_HEART,
     ITEM00_HEART,
@@ -265,6 +279,7 @@ static u8 sItemDropIds[] = {
     ITEM00_HEART,
     ITEM00_HEART,
     ITEM00_HEART,
+    //12
     ITEM00_RUPEE_RED,
     ITEM00_RUPEE_BLUE,
     ITEM00_RUPEE_BLUE,
@@ -281,49 +296,274 @@ static u8 sItemDropIds[] = {
     ITEM00_RUPEE_RED,
     ITEM00_RUPEE_RED,
     ITEM00_RUPEE_RED,
+    //13
     ITEM00_SEEDS,
-    0xFF,
+    ITEM00_NONE,
     ITEM00_NUTS,
-    0xFF,
+    ITEM00_NONE,
     ITEM00_STICK,
-    0xFF,
-    0xFF,
+    ITEM00_NONE,
+    ITEM00_NONE,
     ITEM00_SEEDS,
-    0xFF,
-    0xFF,
-    0xFF,
+    ITEM00_NONE,
+    ITEM00_NONE,
+    ITEM00_NONE,
     ITEM00_NUTS,
-    0xFF,
+    ITEM00_NONE,
     ITEM00_NUTS,
     ITEM00_HEART,
     ITEM00_SEEDS,
+    //14
     ITEM00_HEART,
-    0xFF,
+    ITEM00_NONE,
     ITEM00_SEEDS,
-    0xFF,
+    ITEM00_NONE,
     ITEM00_HEART,
-    0xFF,
-    0xFF,
+    ITEM00_NONE,
+    ITEM00_NONE,
     ITEM00_HEART,
     ITEM00_HEART,
-    0xFF,
-    0xFF,
+    ITEM00_NONE,
+    ITEM00_NONE,
     ITEM00_HEART,
-    0xFF,
+    ITEM00_NONE,
     ITEM00_HEART,
     ITEM00_SEEDS,
     ITEM00_FLEXIBLE,
 };
 
+static u8 sItemDropIdsTemp[240]; 
+
 static u8 sDropQuantities[] = {
-    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1,
-    1, 1, 1, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0,
-    1, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 1, 3, 3, 3, 1, 1, 3, 1, 3, 1, 1, 1, 3, 1, 1,
-    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1, 1, 0, 0, 0, 0,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, //0
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, //1
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, //2
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, //3
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1, 1, 1, 1, //4
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1, 1, 1, 1, 1, //5
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, //6
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, //7
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, //8
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, //9
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, //10
+    3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, //11
+    3, 3, 3, 1, 3, 3, 3, 1, 1, 3, 1, 3, 1, 1, 1, 3, //12
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, //13
+    3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1, 1, //14
+    0, 0, 0, 0
 };
+
+static u8 sDropQuantitiesTemp[244];
+
+static bool isSpecialTable = false;
+
+Item00Type EnItem00_MaskTableGetPriority(u8 itemPriorities[ITEM00_NONE + 1][2]) {
+    Item00Type items[] = {
+        ITEM00_BOMBS_A,
+        ITEM00_STICK,
+        ITEM00_NUTS,
+        ITEM00_SEEDS,
+        ITEM00_ARROWS_LARGE,
+        ITEM00_MAGIC_LARGE,
+        ITEM00_HEART,
+        ITEM00_RUPEE_RED,
+        ITEM00_RUPEE_BLUE,
+        ITEM00_RUPEE_GREEN,
+        ITEM00_FLEXIBLE
+    };
+
+    for (u32 i = 0; i < ARRAY_COUNTU(items); i++) {
+        if (itemPriorities[items[i]][0] > 0 && items[i] <= ITEM00_NONE) {
+            itemPriorities[items[i]][0]--;
+            return items[i];
+        }
+    }
+
+    return ITEM00_FLEXIBLE;
+}
+
+void EnItem00_MaskTable(u8 mainTable[16][2]) {
+
+    u8 itemPriorities[ITEM00_NONE + 1][2];
+
+    for (u32 i = 0; i < ARRAY_COUNTU(itemPriorities); i++) {
+        itemPriorities[i][0] = 0;
+        itemPriorities[i][1] = 0;
+    }
+    
+    itemPriorities[ITEM00_RUPEE_GREEN][0] = 0;
+    itemPriorities[ITEM00_RUPEE_GREEN][1] = 1;
+
+    itemPriorities[ITEM00_RUPEE_BLUE][0] = 0;
+    itemPriorities[ITEM00_RUPEE_BLUE][1] = 1;
+
+    itemPriorities[ITEM00_RUPEE_RED][0] = 0;
+    itemPriorities[ITEM00_RUPEE_RED][1] = 1;
+
+    itemPriorities[ITEM00_HEART][0] = 0;
+    itemPriorities[ITEM00_HEART][1] = 3;
+
+    itemPriorities[ITEM00_MAGIC_LARGE][0] = 0;
+    itemPriorities[ITEM00_MAGIC_LARGE][1] = 1;
+
+    itemPriorities[ITEM00_NUTS][0] = 0;
+    itemPriorities[ITEM00_NUTS][1] = 1;
+
+    itemPriorities[ITEM00_STICK][0] = 0;
+    itemPriorities[ITEM00_STICK][1] = 1;
+
+    itemPriorities[ITEM00_SEEDS][0] = 0;
+    itemPriorities[ITEM00_SEEDS][1] = 1;
+
+    itemPriorities[ITEM00_BOMBS_A][0] = 0;
+    itemPriorities[ITEM00_BOMBS_A][1] = 1;
+
+    itemPriorities[ITEM00_ARROWS_LARGE][0] = 0;
+    itemPriorities[ITEM00_ARROWS_LARGE][1] = 1;
+
+    itemPriorities[ITEM00_FLEXIBLE][0] = 0;
+    itemPriorities[ITEM00_FLEXIBLE][1] = 1;
+    
+
+    const f32 rupees = gSaveContext.rupees;
+    const f32 maxRupees = CUR_CAPACITY(UPG_WALLET);
+
+    const f32 health = gSaveContext.health;
+    const f32 maxHealth = gSaveContext.healthCapacity;
+
+    const f32 magic = gSaveContext.magic;
+    const f32 maxMagic = (gSaveContext.doubleMagic + 1) * 0x30;
+
+    const f32 nuts = AMMO(ITEM_NUT);
+    const f32 maxNuts = CUR_CAPACITY(UPG_NUTS);
+
+    const f32 sticks = AMMO(ITEM_STICK);
+    const f32 maxSticks = CUR_CAPACITY(UPG_STICKS);
+
+    const f32 seeds = AMMO(ITEM_SLINGSHOT);
+    const f32 maxSeeds = CUR_CAPACITY(UPG_BULLET_BAG);
+
+    const f32 bombs = AMMO(ITEM_BOMB);
+    const f32 maxBombs = CUR_CAPACITY(UPG_BOMB_BAG);
+
+    const f32 arrows = AMMO(ITEM_BOW);
+    const f32 maxArrows = CUR_CAPACITY(UPG_QUIVER);
+
+    if (health <= 0x20 && maxHealth > 0x20) {
+        for (int i = 0; i < 16; i++) {
+            if (i < 8) {
+                mainTable[i][0] = ITEM00_HEART;
+                mainTable[i][1] = 3;
+            } else {
+                mainTable[i][0] = ITEM00_FLEXIBLE;
+                mainTable[i][1] = 1;
+            }
+        }
+        return;
+    }
+
+    if (health / maxHealth <= 0.25f) 
+        itemPriorities[ITEM00_HEART][0] += 10;
+    if (health < maxHealth) 
+        itemPriorities[ITEM00_HEART][0] += 5;
+
+    if (rupees < 5 && maxRupees >= 5) 
+        itemPriorities[ITEM00_RUPEE_RED][0] += 10;
+    if (rupees / maxRupees <= 0.5f) 
+        itemPriorities[ITEM00_RUPEE_BLUE][0] += 10;
+    if (rupees < maxRupees) 
+        itemPriorities[ITEM00_RUPEE_GREEN][0] += 5;
+
+    if (magic < maxMagic) 
+        itemPriorities[ITEM00_MAGIC_LARGE][0] += 5;
+
+    for (u32 i = 0; i < ARRAY_COUNTU(gSaveContext.equips.buttonItems); i++) {
+
+        const u8 buttonItem = gSaveContext.equips.buttonItems[i];
+
+        if (buttonItem == ITEM_NUT) {
+            if (nuts < 5 && maxNuts >= 5) 
+                itemPriorities[ITEM00_NUTS][0] += 10;
+            if (nuts / maxNuts <= 0.25f) 
+                itemPriorities[ITEM00_NUTS][0] += 10;
+            if (nuts < maxNuts) 
+                itemPriorities[ITEM00_NUTS][0] += 10;
+        }
+
+        if (buttonItem == ITEM_STICK) {
+            if (sticks < 5 && maxSticks >= 5) 
+                itemPriorities[ITEM00_STICK][0] += 10;
+            if (sticks / maxSticks <= 0.25f) 
+                itemPriorities[ITEM00_STICK][0] += 10;
+            if (sticks < maxSticks) 
+                itemPriorities[ITEM00_STICK][0] += 10;
+        }
+
+        if (buttonItem == ITEM_BOMB) {
+            if (bombs < 5 && maxBombs >= 5) 
+                itemPriorities[ITEM00_BOMBS_A][0] += 10;
+            if (bombs / maxBombs <= 0.25f) 
+                itemPriorities[ITEM00_BOMBS_A][0] += 10;
+            if (bombs < maxBombs) 
+                itemPriorities[ITEM00_BOMBS_A][0] += 10;
+        }
+
+        if (buttonItem == ITEM_SLINGSHOT || buttonItem == ITEM_BOW 
+            || buttonItem == ITEM_BOW_ARROW_FIRE || buttonItem == ITEM_BOW_ARROW_ICE 
+            || buttonItem == ITEM_BOW_ARROW_LIGHT) {
+
+            if (LINK_IS_ADULT) {
+                if (arrows < 5 && maxArrows >= 5) 
+                    itemPriorities[ITEM00_ARROWS_LARGE][0] += 10;
+                if (arrows / maxArrows <= 0.25f) 
+                    itemPriorities[ITEM00_ARROWS_LARGE][0] += 10;
+                if (arrows < maxArrows) 
+                    itemPriorities[ITEM00_ARROWS_LARGE][0] += 10;
+            } else {
+                if (seeds < 5 && maxSeeds >= 5) 
+                    itemPriorities[ITEM00_SEEDS][0] += 10;
+                if (seeds / maxSeeds <= 0.25f) 
+                    itemPriorities[ITEM00_SEEDS][0] += 10;
+                if (seeds < maxSeeds) 
+                    itemPriorities[ITEM00_SEEDS][0] += 10;
+            }
+        }
+
+        if (buttonItem == ITEM_BOW_ARROW_FIRE || buttonItem == ITEM_BOW_ARROW_ICE 
+            || buttonItem == ITEM_BOW_ARROW_LIGHT || buttonItem == ITEM_DINS_FIRE
+            || buttonItem == ITEM_NAYRUS_LOVE || buttonItem == ITEM_FARORES_WIND
+            || buttonItem == ITEM_LENS) {
+            if (magic < 5 && maxMagic >= 5)
+                itemPriorities[ITEM00_MAGIC_LARGE][0] += 10;
+            if (magic / maxMagic <= 0.25f)
+                itemPriorities[ITEM00_MAGIC_LARGE][0] += 10;
+            if (magic < maxMagic)
+                itemPriorities[ITEM00_MAGIC_LARGE][0] += 5;
+        }
+    }
+
+    u32 prioritySum = 0;
+
+    for (u32 i = 0; i < ARRAY_COUNTU(itemPriorities); i++) {
+        prioritySum += itemPriorities[i][0];
+    }
+
+    const f32 transform = 15.0f / (f32)prioritySum;
+
+    for (u32 i = 0; i < ARRAY_COUNTU(itemPriorities); i++) {
+        itemPriorities[i][0] = ceil((f32)itemPriorities[i][0] * transform);
+    }
+
+    mainTable[0][0] = ITEM00_FLEXIBLE;
+    mainTable[0][1] = 1;
+
+    for (u8 i = 1; i < 16; i++) {
+        const Item00Type nextItem = EnItem00_MaskTableGetPriority(itemPriorities);
+        mainTable[i][0] = nextItem;
+        mainTable[i][1] = itemPriorities[nextItem][1];
+    }
+     return;
+}
 
 void EnItem00_SetupAction(EnItem00* this, EnItem00ActionFunc actionFunc) {
     this->actionFunc = actionFunc;
@@ -1413,7 +1653,7 @@ s16 func_8001F404(s16 dropId) {
     if (LINK_IS_ADULT) {
         if (dropId == ITEM00_SEEDS) {
             dropId = ITEM00_ARROWS_SMALL;
-        } else if (dropId == ITEM00_STICK) {
+        } else if (dropId == ITEM00_STICK && !Player_MaskKeatonDrops(GET_PLAYER(gGlobalCtx))) {
             dropId = ITEM00_RUPEE_GREEN;
         }
     } else {
@@ -1534,6 +1774,40 @@ void Item_DropCollectibleRandom(GlobalContext* globalCtx, Actor* fromActor, Vec3
 
     if (CVar_GetS32("gNoRandomDrops", 0)) { return; }
 
+    if (Player_MaskKeatonDrops(GET_PLAYER(globalCtx)) && !isSpecialTable) {
+            memcpy(sItemDropIdsTemp, sItemDropIds, sizeof sItemDropIds);
+            memcpy(sDropQuantitiesTemp, sDropQuantities, sizeof sDropQuantities);
+    } else if (!Player_MaskKeatonDrops(GET_PLAYER(globalCtx)) && isSpecialTable) {
+            memcpy(sItemDropIds, sItemDropIdsTemp, sizeof sItemDropIdsTemp);
+            memcpy(sDropQuantities, sDropQuantitiesTemp, sizeof sDropQuantitiesTemp);
+            isSpecialTable = false;
+    }
+
+    if (Player_MaskKeatonDrops(GET_PLAYER(globalCtx))) {
+        u8 maskTable[16][2];
+        EnItem00_MaskTable(maskTable);
+
+        u8 newTables[] = { 0, 1, 2, 3, 4, 5, 6, 7, 13, 14 };
+
+        for (u32 i = 0; i < ARRAY_COUNTU(newTables); i++) {
+            const u32 startIdx = newTables[i] * 16;
+            for (u32 j = 0; j < ARRAY_COUNTU(maskTable); j++) {
+                sItemDropIds[startIdx + j] = maskTable[j][0];
+                sDropQuantities[startIdx + j] = maskTable[j][1];
+            }
+        }
+
+        for (u32 i = 0; i < ARRAY_COUNTU(sItemDropIds); i++) {
+            if (sItemDropIds[i] == ITEM00_NONE) {
+                sItemDropIds[i] = ITEM00_FLEXIBLE;
+                sDropQuantities[i] = 1;
+            }
+        }
+
+        isSpecialTable = true;
+    }
+
+
     if (fromActor != NULL) {
         if (fromActor->dropFlag) {
             if (fromActor->dropFlag & 0x01) {
@@ -1612,15 +1886,15 @@ void Item_DropCollectibleRandom(GlobalContext* globalCtx, Actor* fromActor, Vec3
         }
     }
 
-    if (dropId != 0xFF && (!CVar_GetS32("gNoHeartDrops", 0) || dropId != ITEM00_HEART)) {
+    if (dropId != ITEM00_NONE && (!CVar_GetS32("gNoHeartDrops", 0) || dropId != ITEM00_HEART)) {
         dropQuantity = sDropQuantities[params + dropTableIndex];
         while (dropQuantity > 0) {
             if (!param8000) {
                 dropId = func_8001F404(dropId);
-                if (dropId != 0xFF) {
+                if (dropId != ITEM00_NONE) {
                     spawnedActor = (EnItem00*)Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_ITEM00, spawnPos->x,
                                                           spawnPos->y, spawnPos->z, 0, 0, 0, dropId);
-                    if ((spawnedActor != NULL) && (dropId != 0xFF)) {
+                    if ((spawnedActor != NULL) && (dropId != ITEM00_NONE)) {
                         spawnedActor->actor.velocity.y = 8.0f;
                         spawnedActor->actor.speedXZ = 2.0f;
                         spawnedActor->actor.gravity = -0.9f;

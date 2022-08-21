@@ -1576,10 +1576,29 @@ void func_80084BF4(GlobalContext* globalCtx, u16 flag) {
 }
 
 u8 Item_Give(GlobalContext* globalCtx, u8 item) {
-    static s16 sAmmoRefillCounts[] = { 5, 10, 20, 30, 5, 10, 30, 0, 5, 20, 1, 5, 20, 50, 200, 10 };
+    s16 sAmmoRefillCounts[] = { 5, 10, 20, 30, 5, 10, 30, 0, 5, 20, 1, 5, 20, 50, 200, 10 };
     s16 i;
     s16 slot;
     s16 temp;
+
+    const bool maskRupees = Player_MaskKeatonRupee(GET_PLAYER(globalCtx));
+    const bool maskDrops = Player_MaskKeatonDrops(GET_PLAYER(globalCtx));
+
+    static s16 sAmmoMaskRupees[] = { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 1 };
+    static s16 sAmmoMaskDrops[] = { 2, 2, 1, 1, 2, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 2 };
+
+    if (maskRupees) {
+        for (u32 j = 0; j < ARRAY_COUNTU(sAmmoMaskRupees); j++) {
+            sAmmoRefillCounts[j] = sAmmoRefillCounts[j] * sAmmoMaskRupees[j];
+        }
+    }
+
+    if (maskDrops) {
+        for (u32 j = 0; j < ARRAY_COUNTU(sAmmoMaskDrops); j++) {
+            sAmmoRefillCounts[j] = sAmmoRefillCounts[j] * sAmmoMaskDrops[j];
+        }
+    }
+        
 
     slot = SLOT(item);
     if (item >= ITEM_STICKS_5) {
@@ -1915,7 +1934,7 @@ u8 Item_Give(GlobalContext* globalCtx, u8 item) {
             Inventory_ChangeUpgrade(UPG_STICKS, 1);
             AMMO(ITEM_STICK) = 1;
         } else {
-            AMMO(ITEM_STICK)++;
+            AMMO(ITEM_STICK) += maskDrops ? 2 : 1;
             if (AMMO(ITEM_STICK) > CUR_CAPACITY(UPG_STICKS)) {
                 AMMO(ITEM_STICK) = CUR_CAPACITY(UPG_STICKS);
             }
@@ -1936,7 +1955,7 @@ u8 Item_Give(GlobalContext* globalCtx, u8 item) {
             Inventory_ChangeUpgrade(UPG_NUTS, 1);
             AMMO(ITEM_NUT) = ITEM_NUT;
         } else {
-            AMMO(ITEM_NUT)++;
+            AMMO(ITEM_NUT) += maskDrops ? 2 : 1;
             if (AMMO(ITEM_NUT) > CUR_CAPACITY(UPG_NUTS)) {
                 AMMO(ITEM_NUT) = CUR_CAPACITY(UPG_NUTS);
             }
@@ -1958,7 +1977,7 @@ u8 Item_Give(GlobalContext* globalCtx, u8 item) {
     } else if (item == ITEM_BOMB) {
         // "Bomb  Bomb  Bomb  Bomb Bomb   Bomb Bomb"
         osSyncPrintf(" 爆弾  爆弾  爆弾  爆弾 爆弾   爆弾 爆弾 \n");
-        if ((AMMO(ITEM_BOMB) += 1) > CUR_CAPACITY(UPG_BOMB_BAG)) {
+        if ((AMMO(ITEM_BOMB) += maskDrops ? 2 : 1) > CUR_CAPACITY(UPG_BOMB_BAG)) {
             AMMO(ITEM_BOMB) = CUR_CAPACITY(UPG_BOMB_BAG);
         }
         return ITEM_NONE;
@@ -2007,7 +2026,7 @@ u8 Item_Give(GlobalContext* globalCtx, u8 item) {
         AMMO(ITEM_SLINGSHOT) = 30;
         return ITEM_NONE;
     } else if (item == ITEM_SEEDS) {
-        AMMO(ITEM_SLINGSHOT) += 5;
+        AMMO(ITEM_SLINGSHOT) += 5 * (maskDrops ? 2 : 1);
 
         if (AMMO(ITEM_SLINGSHOT) >= CUR_CAPACITY(UPG_BULLET_BAG)) {
             AMMO(ITEM_SLINGSHOT) = CUR_CAPACITY(UPG_BULLET_BAG);
