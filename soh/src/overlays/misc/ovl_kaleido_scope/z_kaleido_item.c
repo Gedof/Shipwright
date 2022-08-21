@@ -339,8 +339,15 @@ void KaleidoScope_DrawItemSelect(GlobalContext* globalCtx) {
             pauseCtx->cursorItem[PAUSE_ITEM] = cursorItem;
             pauseCtx->cursorSlot[PAUSE_ITEM] = cursorSlot;
 
-            gSlotAgeReqs[SLOT_TRADE_CHILD] = gItemAgeReqs[ITEM_MASK_BUNNY] =
-                (CVar_GetS32("gMMBunnyHood", 0) && INV_CONTENT(ITEM_TRADE_CHILD) == ITEM_MASK_BUNNY) ? 9 : 1;
+
+            gSlotAgeReqs[SLOT_TRADE_CHILD] = 1;
+
+            for (int mask = ITEM_MASK_KEATON; mask <= ITEM_MASK_TRUTH; mask++) {
+                if (INV_CONTENT(mask) == mask)
+                    gSlotAgeReqs[SLOT_TRADE_CHILD] = Player_MaskAdult(mask) ? 9 : 1;
+                gItemAgeReqs[mask] = Player_MaskAdult(mask) ? 9 : 1;
+            }
+                
 
             if (!((gSlotAgeReqs[cursorSlot] == 9) || (gSlotAgeReqs[cursorSlot] == ((void)0, gSaveContext.linkAge)))) {
                 pauseCtx->nameColorSet = 1;

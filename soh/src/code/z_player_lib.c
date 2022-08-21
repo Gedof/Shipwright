@@ -595,6 +595,128 @@ s32 Player_GetExplosiveHeld(Player* this) {
 }
 
 bool Player_MaskHasPower(Player* this, PlayerMask mask) {
+    return (CVar_GetS32("gPoweredMasks", 0) != 0 && this->currentMask == mask);
+}
+
+bool Player_MaskAdult(ItemID mask) {
+    if (CVar_GetS32("gPoweredMasks", 0) == 0)
+        return false;
+    if (CVar_GetS32("gMasksAdult", 0) != 0)
+        return true;
+
+    switch (mask) {
+        case ITEM_MASK_KEATON:
+            return (CVar_GetS32("gKeatonAdult", 0) != 0);
+        case ITEM_MASK_SKULL:
+            return (CVar_GetS32("gSkullAdult", 0) != 0);
+        case ITEM_MASK_SPOOKY:
+            return (CVar_GetS32("gSpookyAdult", 0) != 0);
+        case ITEM_MASK_BUNNY:
+            return (CVar_GetS32("gBunnyAdult", 0) != 0);
+        case ITEM_MASK_GORON:
+            return (CVar_GetS32("gGoronMaskAdult", 0) != 0);
+        case ITEM_MASK_ZORA:
+            return (CVar_GetS32("gZoraMaskAdult", 0) != 0);
+        case ITEM_MASK_GERUDO:
+            return (CVar_GetS32("gGerudoMaskAdult", 0) != 0);
+        case ITEM_MASK_TRUTH:
+            return (CVar_GetS32("gTruthAdult", 0) != 0);
+        default:
+            return false;
+    }
+}
+
+bool Player_MaskKeatonRupee(Player* this) {
+    return Player_MaskHasPower(this, PLAYER_MASK_KEATON) && 
+        (CVar_GetS32("gKeatonRupees", 0) != 0);
+}
+
+bool Player_MaskKeatonDrops(Player* this) {
+    return Player_MaskHasPower(this, PLAYER_MASK_KEATON) && 
+        (CVar_GetS32("gKeatonDrops", 0) != 0);
+}
+
+bool Player_MaskSkullDmg(Player* this) {
+    return Player_MaskHasPower(this, PLAYER_MASK_SKULL) && 
+        (CVar_GetS32("gSkullDmg", 0) != 0);
+}
+
+bool Player_MaskSpookyStick(Player* this) {
+    return Player_MaskHasPower(this, PLAYER_MASK_SPOOKY) && 
+        (CVar_GetS32("gSpookyStick", 0) != 0);
+}
+
+bool Player_MaskSpookyShield(Player* this) {
+    return Player_MaskHasPower(this, PLAYER_MASK_SPOOKY) && 
+        (CVar_GetS32("gSpookyShield", 0) != 0);
+}
+
+bool Player_MaskBunnyMM(Player* this) {
+    return Player_MaskHasPower(this, PLAYER_MASK_BUNNY) && 
+        (CVar_GetS32("gMMBunnyHood", 0) != 0);
+}
+
+bool Player_MaskGoronDef(Player* this) {
+    return Player_MaskHasPower(this, PLAYER_MASK_GORON) && 
+        (CVar_GetS32("gGoronMaskDef", 0) != 0);
+}
+
+bool Player_MaskGoronHeat(Player* this) {
+    return Player_MaskHasPower(this, PLAYER_MASK_GORON) && 
+        (CVar_GetS32("gGoronMaskHeat", 0) != 0) &&
+        CHECK_OWNED_EQUIP(EQUIP_TUNIC, 1);
+}
+
+f32 Player_MaskGetDamageTaken(Player* this) {
+    if (Player_MaskSkullDmg(this))
+        return 2;
+    if (Player_MaskGoronDef(this))
+        return 0.5f;
+    return 1;
+}
+
+bool Player_MaskZoraSwim(Player* this) {
+    return Player_MaskHasPower(this, PLAYER_MASK_ZORA) && 
+        (CVar_GetS32("gZoraMaskSwim", 0) != 0);
+}
+
+bool Player_MaskZoraSink(Player* this) {
+    return Player_MaskHasPower(this, PLAYER_MASK_ZORA) && 
+        (CVar_GetS32("gZoraMaskSink", 0) != 0) &&
+        (LINK_IS_ADULT || (CVar_GetS32("gZoraMaskSinkChild", 0) != 0)) &&
+        CHECK_OWNED_EQUIP(EQUIP_BOOTS, 1) &&
+        !(this->stateFlags1 & PLAYER_STATE1_10) && (this->stateFlags1 & PLAYER_STATE1_27) &&
+        this->currentBoots != PLAYER_BOOTS_IRON;
+}
+
+bool Player_MaskZoraBreathe(Player* this) {
+    return Player_MaskHasPower(this, PLAYER_MASK_ZORA) && 
+        (CVar_GetS32("gZoraMaskBreathe", 0) != 0) && 
+        CHECK_OWNED_EQUIP(EQUIP_TUNIC, 2);
+}
+
+bool Player_MaskZoraWaterBoom(Player* this) {
+    return Player_MaskHasPower(this, PLAYER_MASK_ZORA) && 
+        (CVar_GetS32("gZoraMaskWaterBoom", 0) != 0);
+}
+
+bool Player_MaskZoraWaterSword(Player* this) {
+    return Player_MaskHasPower(this, PLAYER_MASK_ZORA) && 
+        (CVar_GetS32("gZoraMaskWaterSword", 0) != 0);
+}
+
+bool Player_MaskGerudoStealth(Player* this) {
+    return Player_MaskHasPower(this, PLAYER_MASK_GERUDO) && 
+        (CVar_GetS32("gGerudoMaskStealth", 0) != 0);
+}
+
+bool Player_MaskTruthMagicRegen(Player* this) {
+    return Player_MaskHasPower(this, PLAYER_MASK_TRUTH)
+    && (CVar_GetS32("gTruthMagicRegen", 0) != 0);
+}
+
+
+
 s32 func_8008F2BC(Player* this, s32 actionParam) {
     s32 sword = 0;
 

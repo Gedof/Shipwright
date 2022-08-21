@@ -1944,7 +1944,7 @@ void func_80833DF8(Player* this, GlobalContext* globalCtx) {
     s32 i;
 
     if (this->currentMask != PLAYER_MASK_NONE) {
-        if (CVar_GetS32("gMMBunnyHood", 0) != 0) {
+        if (CVar_GetS32("gPoweredMasks", 0) != 0) {
             s32 maskItem = this->currentMask - PLAYER_MASK_KEATON + ITEM_MASK_KEATON;
             bool hasOnDpad = false;
             if (CVar_GetS32("gDpadEquips", 0) != 0) {

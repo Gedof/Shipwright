@@ -1120,7 +1120,7 @@ void func_80083108(GlobalContext* globalCtx) {
 
                 if (interfaceCtx->restrictions.tradeItems != 0) {
                     for (i = 1; i < ARRAY_COUNT(gSaveContext.equips.buttonItems); i++) {
-                        if ((CVar_GetS32("gMMBunnyHood", 0) != 0)
+                        if ((CVar_GetS32("gPoweredMasks", 0) != 0)
                             && (gSaveContext.equips.buttonItems[i] >= ITEM_MASK_KEATON)
                             && (gSaveContext.equips.buttonItems[i] <= ITEM_MASK_TRUTH)) {
                             gSaveContext.buttonStatus[BUTTON_STATUS_INDEX(i)] = BTN_ENABLED;
