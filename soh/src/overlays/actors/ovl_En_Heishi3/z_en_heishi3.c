@@ -146,10 +146,12 @@ void EnHeishi3_StandSentinelInGrounds(EnHeishi3* this, GlobalContext* globalCtx)
 void EnHeishi3_StandSentinelInCastle(EnHeishi3* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
+    const bool playerInvisible = Player_MaskGerudoStealth(player) && this->actor.xzDistToPlayer > 25;
+
     SkelAnime_Update(&this->skelAnime);
     if ((player->actor.world.pos.x < -190.0f) && (player->actor.world.pos.x > -380.0f) &&
         (fabsf(player->actor.world.pos.y - this->actor.world.pos.y) < 100.0f) &&
-        (player->actor.world.pos.z < 1020.0f) && (player->actor.world.pos.z > 700.0f) && (sPlayerCaught == 0)) {
+        (player->actor.world.pos.z < 1020.0f) && (player->actor.world.pos.z > 700.0f) && (sPlayerCaught == 0) && !playerInvisible) {
         if (this->unk_278 == 1) {
             if ((player->actor.world.pos.x < -290.0f)) {
                 return;

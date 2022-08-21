@@ -2481,7 +2481,18 @@ void Actor_UpdateAll(GlobalContext* globalCtx, ActorContext* actorCtx) {
                 }
             } else {
                 Math_Vec3f_Copy(&actor->prevPos, &actor->world.pos);
-                actor->xzDistToPlayer = Actor_WorldDistXZToActor(actor, &player->actor);
+
+                f32 xzDistanceToPlayer = Actor_WorldDistXZToActor(actor, &player->actor);
+
+                if (Player_MaskGerudoStealth(player) &&
+                    (actor->category == ACTORCAT_ENEMY || actor->category == ACTORCAT_NPC)) {
+                    if (xzDistanceToPlayer > 25)
+                        xzDistanceToPlayer = 1000;
+                }
+
+                actor->xzDistToPlayer = xzDistanceToPlayer;
+
+
                 actor->yDistToPlayer = Actor_HeightDiff(actor, &player->actor);
                 actor->xyzDistToPlayerSq = SQ(actor->xzDistToPlayer) + SQ(actor->yDistToPlayer);
 

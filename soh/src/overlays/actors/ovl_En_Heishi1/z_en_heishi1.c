@@ -427,7 +427,10 @@ void EnHeishi1_Update(Actor* thisx, GlobalContext* globalCtx) {
         if (this->type != 5) {
             path = this->path * 2;
             if ((sCamDataIdxs[path] == activeCam->camDataIdx) || (sCamDataIdxs[path + 1] == activeCam->camDataIdx)) {
-                if (!sHeishi1PlayerIsCaught) {
+
+                const bool playerInvisible = Player_MaskGerudoStealth(player) && this->actor.xzDistToPlayer > 25;
+
+                if (!sHeishi1PlayerIsCaught && !playerInvisible) {
                     if ((this->actionFunc == EnHeishi1_Walk) || (this->actionFunc == EnHeishi1_Wait)) {
                         Vec3f searchBallVel;
                         Vec3f searchBallAccel = { 0.0f, 0.0f, 0.0f };
