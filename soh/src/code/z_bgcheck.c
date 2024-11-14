@@ -2694,6 +2694,7 @@ DynaPolyActor* DynaPoly_GetActor(CollisionContext* colCtx, s32 bgId) {
     return (DynaPolyActor*)colCtx->dyna.bgActors[bgId].actor;
 }
 
+//Remove collision
 void func_8003EBF8(PlayState* play, DynaCollisionContext* dyna, s32 bgId) {
     if (DynaPoly_IsBgIdBgActor(bgId)) {
         dyna->bgActorFlags[bgId] |= 4;
@@ -2701,6 +2702,7 @@ void func_8003EBF8(PlayState* play, DynaCollisionContext* dyna, s32 bgId) {
     }
 }
 
+//Restore collision
 void func_8003EC50(PlayState* play, DynaCollisionContext* dyna, s32 bgId) {
     if (DynaPoly_IsBgIdBgActor(bgId)) {
         dyna->bgActorFlags[bgId] &= ~4;

@@ -1561,6 +1561,8 @@ void SaveManager::LoadBaseVersion1() {
     SaveManager::Instance->LoadArray("randomizerInf", ARRAY_COUNT(gSaveContext.randomizerInf), [](size_t i) {
         SaveManager::Instance->LoadData("", gSaveContext.randomizerInf[i]);
     });
+
+    SaveManager::Instance->LoadData("isWaterfallOpen", gSaveContext.isWaterfallOpen);
 }
 
 void SaveManager::LoadBaseVersion2() {
@@ -1750,6 +1752,8 @@ void SaveManager::LoadBaseVersion2() {
     if (isMQ) {
         gSaveContext.questId = QUEST_MASTER;
     }
+
+    SaveManager::Instance->LoadData("isWaterfallOpen", gSaveContext.isWaterfallOpen);
 
     // Workaround for breaking save compatibility from 5.0.2 -> 5.1.0 in commit d7c35221421bf712b5ead56a360f81f624aca4bc
     if (!gSaveContext.isMagicAcquired) {
@@ -1998,6 +2002,7 @@ void SaveManager::LoadBaseVersion3() {
         SaveManager::Instance->LoadData("tempCollectFlags", gSaveContext.backupFW.tempCollectFlags);
     });
     SaveManager::Instance->LoadData("dogParams", gSaveContext.dogParams);
+    SaveManager::Instance->LoadData("isWaterfallOpen", gSaveContext.isWaterfallOpen);
 }
 
 void SaveManager::LoadBaseVersion4() {
@@ -2180,6 +2185,7 @@ void SaveManager::LoadBaseVersion4() {
     });
     SaveManager::Instance->LoadData("dogParams", gSaveContext.dogParams);
     SaveManager::Instance->LoadData("maskMemory", gSaveContext.maskMemory);
+    SaveManager::Instance->LoadData("isWaterfallOpen", gSaveContext.isWaterfallOpen);
 }
 
 void SaveManager::SaveBase(SaveContext* saveContext, int sectionID, bool fullSave) {
@@ -2350,6 +2356,7 @@ void SaveManager::SaveBase(SaveContext* saveContext, int sectionID, bool fullSav
     });
     SaveManager::Instance->SaveData("dogParams", saveContext->dogParams);
     SaveManager::Instance->SaveData("maskMemory", saveContext->maskMemory);
+    SaveManager::Instance->SaveData("isWaterfallOpen", saveContext->isWaterfallOpen);
 }
 
 // Load a string into a char array based on size and ensuring it is null terminated when overflowed

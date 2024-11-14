@@ -45,6 +45,7 @@ extern "C" {
 #include "variables.h"
 #include "functions.h"
 #include "src/overlays/actors/ovl_En_Door/z_en_door.h"
+#include <overlays/actors/ovl_Bg_Spot03_Taki/z_bg_spot03_taki.h>
 void ResourceMgr_PatchGfxByName(const char* path, const char* patchName, int index, Gfx instruction);
 void ResourceMgr_UnpatchGfxByName(const char* path, const char* patchName);
 
@@ -1185,7 +1186,7 @@ void RegisterRandomizedEnemySizes() {
         // Randomized Enemy Sizes
         Player* player = GET_PLAYER(gPlayState);
         Actor* actor = static_cast<Actor*>(refActor);
-
+       
         // Exclude wobbly platforms in Jabu because they need to act like platforms.
         // Exclude Dead Hand hands and Bongo Bongo main body because they make the fights (near) impossible.
         uint8_t excludedEnemy = actor->id == ACTOR_EN_BROB || actor->id == ACTOR_EN_DHA || (actor->id == ACTOR_BOSS_SST && actor->params == -1);
@@ -1395,6 +1396,45 @@ void RegisterRandomizerCompasses() {
     });
 }
 
+
+void RegisterKeepWaterfallOpen() {
+    // Keep Zora's River Waterfall open after plating the song
+    GameInteractor::Instance->RegisterGameHook<GameInteractor::OnActorInit>([](void* refActor) {
+        //Set it to open on init if already played
+        Actor* actor = static_cast<Actor*>(refActor);
+        if (CVarGetInteger(CVAR_ENHANCEMENT("KeepWaterfallOpen"), 0) && actor->id == ACTOR_BG_SPOT03_TAKI && gSaveContext.isWaterfallOpen == 1) {
+            
+            BgSpot03Taki* waterfall = static_cast<BgSpot03Taki*>(refActor);
+
+            waterfall->state = WATERFALL_OPENED;
+            func_8003EBF8(gPlayState, &gPlayState->colCtx.dyna, waterfall->dyna.bgId); //remove collision
+            waterfall->openingAlpha = 0;
+            waterfall->timer = 40;
+        }
+    });
+    GameInteractor::Instance->RegisterGameHook<GameInteractor::OnActorUpdate>([](void* refActor) {
+        
+        Actor* actor = static_cast<Actor*>(refActor);
+        if (CVarGetInteger(CVAR_ENHANCEMENT("KeepWaterfallOpen"), 0)  && actor->id == ACTOR_BG_SPOT03_TAKI) {
+            BgSpot03Taki* waterfall = static_cast<BgSpot03Taki*>(refActor);
+
+            //Keep timer from running out if open unless togglable and played song
+            if (gSaveContext.isWaterfallOpen == 1 && waterfall->timer > -1 &&
+                !(CVarGetInteger(CVAR_ENHANCEMENT("ToggleableWaterfall"), 0) && Flags_GetSwitch(gPlayState, waterfall->switchFlag))) {
+                waterfall->timer = 40;
+            }
+
+            //Set persistence
+            if (waterfall->state == WATERFALL_OPENED) {
+                gSaveContext.isWaterfallOpen = 1;
+            } else if (waterfall->state == WATERFALL_CLOSED) {
+                gSaveContext.isWaterfallOpen = 0;
+            }
+        }
+
+    });
+}
+
 void InitMods() {
     BossRush_RegisterHooks();
     RandomizerRegisterHooks();
@@ -1438,4 +1478,5 @@ void InitMods() {
     RegisterHurtContainerModeHandler();
     RegisterPauseMenuHooks();
     RandoKaleido_RegisterHooks();
+    RegisterKeepWaterfallOpen();
 }

@@ -794,6 +794,12 @@ void DrawEnhancementsMenu() {
                     "- Not within range of Ocarina playing spots");
                 UIWidgets::PaddedEnhancementCheckbox("Pause Warp", CVAR_ENHANCEMENT("PauseWarp"), true, false);
                 UIWidgets::Tooltip("Selection of warp song in pause menu initiates warp. Disables song playback.");
+                UIWidgets::PaddedEnhancementCheckbox("Keep Zora's River Waterfall Open", CVAR_ENHANCEMENT("KeepWaterfallOpen"), true, false);
+                UIWidgets::Tooltip("The entrance to Zora's Domain will remain open after playing Zelda's Lullaby for the first time.");
+                if (CVarGetInteger(CVAR_ENHANCEMENT("KeepWaterfallOpen"), 0)) {
+                    UIWidgets::PaddedEnhancementCheckbox("Toggleable Waterfall", CVAR_ENHANCEMENT("ToggleableWaterfall"), true, false);
+                    UIWidgets::Tooltip("Close the waterfall by playing Zelda's Lullaby again.");
+                }
                 
                 ImGui::EndTable();
                 ImGui::EndMenu();
@@ -1239,7 +1245,7 @@ void DrawEnhancementsMenu() {
             UIWidgets::Tooltip("Removes the input requirement on textboxes after defeating Ganon, allowing Credits sequence to continue to progress");
             UIWidgets::PaddedEnhancementCheckbox("Answer Navi Prompt with L Button", CVAR_ENHANCEMENT("NaviOnL"), true, false);
             UIWidgets::Tooltip("Speak to Navi with L but enter first-person camera with C-Up");
-
+            
             // Blue Fire Arrows
             bool forceEnableBlueFireArrows = IS_RANDO &&
                 OTRGlobals::Instance->gRandomizer->GetRandoSettingValue(RSK_BLUE_FIRE_ARROWS);
