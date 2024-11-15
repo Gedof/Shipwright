@@ -1245,7 +1245,6 @@ void DrawEnhancementsMenu() {
             UIWidgets::Tooltip("Removes the input requirement on textboxes after defeating Ganon, allowing Credits sequence to continue to progress");
             UIWidgets::PaddedEnhancementCheckbox("Answer Navi Prompt with L Button", CVAR_ENHANCEMENT("NaviOnL"), true, false);
             UIWidgets::Tooltip("Speak to Navi with L but enter first-person camera with C-Up");
-            
             // Blue Fire Arrows
             bool forceEnableBlueFireArrows = IS_RANDO &&
                 OTRGlobals::Instance->gRandomizer->GetRandoSettingValue(RSK_BLUE_FIRE_ARROWS);

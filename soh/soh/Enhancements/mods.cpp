@@ -1186,7 +1186,6 @@ void RegisterRandomizedEnemySizes() {
         // Randomized Enemy Sizes
         Player* player = GET_PLAYER(gPlayState);
         Actor* actor = static_cast<Actor*>(refActor);
-       
         // Exclude wobbly platforms in Jabu because they need to act like platforms.
         // Exclude Dead Hand hands and Bongo Bongo main body because they make the fights (near) impossible.
         uint8_t excludedEnemy = actor->id == ACTOR_EN_BROB || actor->id == ACTOR_EN_DHA || (actor->id == ACTOR_BOSS_SST && actor->params == -1);
@@ -1398,7 +1397,7 @@ void RegisterRandomizerCompasses() {
 
 
 void RegisterKeepWaterfallOpen() {
-    // Keep Zora's River Waterfall open after plating the song
+    // Keep Zora's River Waterfall open after playing lullaby
     GameInteractor::Instance->RegisterGameHook<GameInteractor::OnActorInit>([](void* refActor) {
         //Set it to open on init if already played
         Actor* actor = static_cast<Actor*>(refActor);
