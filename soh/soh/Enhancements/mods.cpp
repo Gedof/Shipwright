@@ -1401,6 +1401,7 @@ void RegisterKeepWaterfallOpen() {
     GameInteractor::Instance->RegisterGameHook<GameInteractor::OnActorInit>([](void* refActor) {
         //Set it to open on init if already played
         Actor* actor = static_cast<Actor*>(refActor);
+
         if (CVarGetInteger(CVAR_ENHANCEMENT("KeepWaterfallOpen"), 0) && actor->id == ACTOR_BG_SPOT03_TAKI && gSaveContext.isWaterfallOpen == 1) {
             
             BgSpot03Taki* waterfall = static_cast<BgSpot03Taki*>(refActor);
@@ -1414,10 +1415,12 @@ void RegisterKeepWaterfallOpen() {
     GameInteractor::Instance->RegisterGameHook<GameInteractor::OnActorUpdate>([](void* refActor) {
         
         Actor* actor = static_cast<Actor*>(refActor);
+
         if (CVarGetInteger(CVAR_ENHANCEMENT("KeepWaterfallOpen"), 0)  && actor->id == ACTOR_BG_SPOT03_TAKI) {
+            
             BgSpot03Taki* waterfall = static_cast<BgSpot03Taki*>(refActor);
 
-            //Keep timer from running out if open unless togglable and played song
+            //Keep timer from running out if open unless toggleable and played song
             if (gSaveContext.isWaterfallOpen == 1 && waterfall->timer > -1 &&
                 !(CVarGetInteger(CVAR_ENHANCEMENT("ToggleableWaterfall"), 0) && Flags_GetSwitch(gPlayState, waterfall->switchFlag))) {
                 waterfall->timer = 40;
