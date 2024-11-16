@@ -80,6 +80,7 @@ static const char* imguiScaleOptions[4] = { "Small", "Normal", "Large", "X-Large
     static const char* chestStyleMatchesContentsOptions[4] = { "Disabled", "Both", "Texture Only", "Size Only" };
     static const char* skipGetItemAnimationOptions[3] = { "Disabled", "Junk Items", "All Items" };
     static const char* skipForcedDialogOptions[4] = { "None", "Navi Only", "NPCs Only", "All" };
+    static const char* persistShadowDoorOptions[3] = { "Disabled", "Child to Adult", "Both Ways"};
     static const char* bunnyHoodOptions[3] = { "Disabled", "Faster Run & Longer Jump", "Faster Run" };
     static const char* mirroredWorldModes[9] = {
         "Disabled",           "Always",        "Random",          "Random (Seeded)",          "Dungeons",
@@ -794,6 +795,12 @@ void DrawEnhancementsMenu() {
                     "- Not within range of Ocarina playing spots");
                 UIWidgets::PaddedEnhancementCheckbox("Pause Warp", CVAR_ENHANCEMENT("PauseWarp"), true, false);
                 UIWidgets::Tooltip("Selection of warp song in pause menu initiates warp. Disables song playback.");
+                UIWidgets::PaddedText("Persist Shadow Temple Door through time", true, false);
+                UIWidgets::EnhancementCombobox(CVAR_ENHANCEMENT("PersistShadowDoor"), persistShadowDoorOptions, PERSIST_SHADOW_DOOR_DISABLED);
+                UIWidgets::Tooltip(
+                    "The Shadow Temple Door in Graveyard opens for both ages.\n"
+                    " - Child to Adult: If you open the door as Child, it will be open as Adult\n"
+                    " - Both Ways: If you open the door in any age, it will be open as the other too");
                 
                 ImGui::EndTable();
                 ImGui::EndMenu();

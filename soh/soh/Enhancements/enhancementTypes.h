@@ -29,6 +29,12 @@ typedef enum {
 } ForcedDialogMode;
 
 typedef enum {
+    PERSIST_SHADOW_DOOR_DISABLED,
+    PERSIST_SHADOW_DOOR_CHILD,
+    PERSIST_SHADOW_DOOR_BOTH
+} PersistShadowDoorMode;
+
+typedef enum {
     BUNNY_HOOD_VANILLA,
     BUNNY_HOOD_FAST_AND_JUMP,
     BUNNY_HOOD_FAST

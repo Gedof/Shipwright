@@ -1395,6 +1395,27 @@ void RegisterRandomizerCompasses() {
     });
 }
 
+void RegisterPersistShadowDoor() {
+    //Change both age flags when opening Shadow Temple Door
+    GameInteractor::Instance->RegisterGameHook<GameInteractor::OnSceneFlagSet>(
+        [](int16_t sceneNum, int16_t flagType, int16_t flag) 
+        {
+            int32_t pShdwDoor = CVarGetInteger(CVAR_ENHANCEMENT("PersistShadowDoor"), PERSIST_SHADOW_DOOR_DISABLED);
+            int16_t childDoor = 0x1F; //child flag
+            int16_t adultDoor = 0x1E; //adult flag
+
+            if (pShdwDoor != PERSIST_SHADOW_DOOR_DISABLED && 
+                sceneNum == SCENE_GRAVEYARD && 
+                flagType == FLAG_SCENE_SWITCH)
+            {
+                if ((pShdwDoor == PERSIST_SHADOW_DOOR_CHILD || pShdwDoor == PERSIST_SHADOW_DOOR_BOTH) && flag == childDoor)
+                    GameInteractor::RawAction::SetSceneFlag(SCENE_GRAVEYARD, FLAG_SCENE_SWITCH, adultDoor);
+                else if (pShdwDoor == PERSIST_SHADOW_DOOR_BOTH && flag == adultDoor)
+                    GameInteractor::RawAction::SetSceneFlag(SCENE_GRAVEYARD, FLAG_SCENE_SWITCH, childDoor);
+            }
+        });
+}
+
 void InitMods() {
     BossRush_RegisterHooks();
     RandomizerRegisterHooks();
@@ -1438,4 +1459,5 @@ void InitMods() {
     RegisterHurtContainerModeHandler();
     RegisterPauseMenuHooks();
     RandoKaleido_RegisterHooks();
+    RegisterPersistShadowDoor();
 }
