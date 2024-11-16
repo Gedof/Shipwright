@@ -1398,27 +1398,22 @@ void RegisterRandomizerCompasses() {
 
 void RegisterKeepWaterfallOpen() {
     // Keep Zora's River Waterfall open after playing lullaby
-    GameInteractor::Instance->RegisterGameHook<GameInteractor::OnActorInit>([](void* refActor) {
+    GameInteractor::Instance->RegisterGameHookForID<GameInteractor::OnActorInit>(ACTOR_BG_SPOT03_TAKI, [](void* refActor) {
         //Set it to open on init if already played
-        Actor* actor = static_cast<Actor*>(refActor);
+        BgSpot03Taki* waterfall = static_cast<BgSpot03Taki*>(refActor);
 
-        if (CVarGetInteger(CVAR_ENHANCEMENT("KeepWaterfallOpen"), 0) && actor->id == ACTOR_BG_SPOT03_TAKI && gSaveContext.isWaterfallOpen == 1) {
-            
-            BgSpot03Taki* waterfall = static_cast<BgSpot03Taki*>(refActor);
-
+        if (CVarGetInteger(CVAR_ENHANCEMENT("KeepWaterfallOpen"), 0) && gSaveContext.isWaterfallOpen == 1) {
             waterfall->state = WATERFALL_OPENED;
             func_8003EBF8(gPlayState, &gPlayState->colCtx.dyna, waterfall->dyna.bgId); //remove collision
             waterfall->openingAlpha = 0;
             waterfall->timer = 40;
         }
     });
-    GameInteractor::Instance->RegisterGameHook<GameInteractor::OnActorUpdate>([](void* refActor) {
+    GameInteractor::Instance->RegisterGameHookForID<GameInteractor::OnActorUpdate>(ACTOR_BG_SPOT03_TAKI, [](void* refActor) {
         
-        Actor* actor = static_cast<Actor*>(refActor);
+        BgSpot03Taki* waterfall = static_cast<BgSpot03Taki*>(refActor);
 
-        if (CVarGetInteger(CVAR_ENHANCEMENT("KeepWaterfallOpen"), 0)  && actor->id == ACTOR_BG_SPOT03_TAKI) {
-            
-            BgSpot03Taki* waterfall = static_cast<BgSpot03Taki*>(refActor);
+        if (CVarGetInteger(CVAR_ENHANCEMENT("KeepWaterfallOpen"), 0)) {        
 
             //Keep timer from running out if open unless toggleable and played song
             if (gSaveContext.isWaterfallOpen == 1 && waterfall->timer > -1 &&
